@@ -1,35 +1,16 @@
-/* eslint-disable radix */
-/* eslint-disable guard-for-in */
 import fs from 'fs'
 import path from 'path'
 import Koa from 'koa'
 
-import session from 'koa-session'
-import koaBody from 'koa-body'
 import koaStatic from 'koa-static'
-import proper from 'koa-proper'
-
+import Router from 'koa-router'
+import koaBody from 'koa-body'
+import { ValidateMiddleware } from '@server/middlewares'
 import config from './config'
-import {
-    ParamsMiddleware,
-    LogMiddleware,
-    ExtensionMiddleware,
-} from './middlewares'
 
-// import router from './routers'
+import * as FeedbackController from './controllers/FeedbackController'
 
 const app = new Koa()
-app.proxy = true
-
-app.keys = ['feedback-server', config.cookieKey]
-app.use(
-    session(
-        {
-            maxAge: 3600 * 1000 * 12 
-        },
-        app
-    )
-)
 
 app.use(
     koaBody({
@@ -69,15 +50,19 @@ app.use(async (ctx, next) => {
     }
 })
 
-app.use(ExtensionMiddleware())
-app.use(ParamsMiddleware())
-app.use(proper())
-app.use(LogMiddleware())
+app.use(ValidateMiddleware())
 
-// app.use(router.routes())
+const api = new Router<null, Koa.Context>({ prefix: '/api' })
+api.get('/list', FeedbackController.list)
+api.post('/receive', FeedbackController.receive)
+app.use(api.routes())
+
 app.listen(config.port, () => {
     // eslint-disable-next-line no-console
-    console.log('Server running on port', config.port)
-    // eslint-disable-next-line no-console
-    console.log('env', config.isProduction ? 'production' : 'test')
+    console.log(
+        'Server running on port',
+        config.port,
+        '\nenv',
+        config.isProduction ? 'production' : 'development'
+    )
 })

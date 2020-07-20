@@ -1,6 +1,5 @@
 // import * as Koa from 'koa'
 // import config from '../config'
-
 // export default function middleware() {
 //     // eslint-disable-next-line func-names
 //     return async function (ctx: Koa.Context, next: Function): Promise<void> {
@@ -18,7 +17,6 @@
 //             date: new Date()
 //         }
 //         console.info(logInfo)
-
 //         try {
 //             await next()
 //         } catch (error) {
@@ -35,7 +33,6 @@
 //                 ctx.throw(500, error)
 //             }
 //         }
-
 //         if (config.isProduction) {
 //             logInfo.stage = 'end'
 //             logInfo.duration = new Date().getTime() - logInfo.date.getTime()
@@ -43,3 +40,4 @@
 //         }
 //     }
 // }
+//# sourceMappingURL=LogMiddleware.js.map
