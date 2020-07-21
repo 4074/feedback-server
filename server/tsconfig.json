@@ -9,7 +9,6 @@
         "outDir": "build",
         "baseUrl": "./src",
         "typeRoots": ["node_modules/@types", "typings"],
-        // "traceResolution": true,
         "paths": {
             "@server/*": [
                 "*"

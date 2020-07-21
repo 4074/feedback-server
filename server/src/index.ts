@@ -52,7 +52,7 @@ app.use(async (ctx, next) => {
 
 app.use(ValidateMiddleware())
 
-const api = new Router<null, Koa.Context>({ prefix: '/api' })
+const api = new Router({ prefix: '/api' })
 api.get('/list', FeedbackController.list)
 api.post('/receive', FeedbackController.receive)
 app.use(api.routes())

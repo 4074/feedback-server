@@ -11,8 +11,7 @@
     "upload": "ts-node src/upload",
     "build": "tsc",
     "serve": "node build/index.js",
-    "lint": "eslint --fix --ext .ts src",
-    "d": "ts-node --dir src src/index.ts"
+    "lint": "eslint --fix --ext .ts src"
   },
   "keywords": [],
   "author": "",
