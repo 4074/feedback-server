@@ -1,4 +1,4 @@
-import koa from 'koa'
+import Koa from 'koa'
 import Validator, { ValidationSchema } from 'fastest-validator'
 
 interface ValidateFunction {
@@ -11,26 +11,24 @@ declare module 'koa' {
     }
 }
 
-export default function middleware(): koa.Middleware {
+export default function middleware(): Koa.Middleware {
     return async function m(
-        ctx: koa.Context,
+        ctx: Koa.Context,
         next: () => Promise<any>
     ): Promise<any> {
         const validator = new Validator()
         ctx.validate = (source: any, schema: ValidationSchema) => {
             const errors = validator.validate(source, schema)
             if (Array.isArray(errors) && errors.length) {
-                ctx.throw(
-                    400,
-                    errors
-                        .map(
-                            (e) =>
-                                `${e.message} Actual: ${
-                                    e.actual === '' ? `'${e.actual}'` : e.actual
-                                }.`
-                        )
-                        .join('\n')
-                )
+                const messages = errors
+                    .map(
+                        (e) =>
+                            `${e.message} Actual: ${
+                                e.actual === '' ? `'${e.actual}'` : e.actual
+                            }.`
+                    )
+                    .join('\n')
+                ctx.throw(400, messages)
             }
             return source
         }

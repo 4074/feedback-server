@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
-import Koa from 'koa'
 
+import Koa from 'koa'
 import koaStatic from 'koa-static'
 import Router from 'koa-router'
 import koaBody from 'koa-body'
-import { ValidateMiddleware } from '@server/middlewares'
-import config from './config'
 
-import * as FeedbackController from './controllers/FeedbackController'
+import config from '@server/config'
+import { LogMiddleware, ValidateMiddleware } from '@server/middlewares'
+import { FeedbackController } from '@server/controllers'
 
 const app = new Koa()
 
@@ -50,10 +50,12 @@ app.use(async (ctx, next) => {
     }
 })
 
+app.use(LogMiddleware())
 app.use(ValidateMiddleware())
 
 const api = new Router({ prefix: '/api' })
 api.get('/list', FeedbackController.list)
+api.get('/error', FeedbackController.error)
 api.post('/receive', FeedbackController.receive)
 app.use(api.routes())
 
