@@ -1,6 +1,6 @@
 {
     "editor.formatOnSave": false,
-    "editor.tabSize": 4,
+    "editor.tabSize": 2,
     "eslint.trace.server": "messages",
     "eslint.workingDirectories": [
         "./app", "./server"
