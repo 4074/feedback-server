@@ -1,12 +1,18 @@
 import Koa from 'koa'
+import service from '@server/service'
 
-export async function list(ctx: Koa.Context): Promise<void> {
-  ctx.body = []
+export async function list(): Promise<API.AppController.ListData> {
+  const apps = await service.findApps()
+  return { apps }
 }
 
-export async function save(ctx: Koa.Context): Promise<void> {
-  const params: Params.App.Save = ctx.validate(ctx.request.body, {
-    uid: 'number'
+export async function save(
+  ctx: Koa.Context
+): Promise<API.AppController.SaveData> {
+  const params: API.AppController.SaveParams = ctx.validate(ctx.request.body, {
+    name: 'string',
+    hosts: 'array'
   })
-  ctx.body = params
+  const app = await service.saveApp(params)
+  return app
 }

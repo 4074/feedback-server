@@ -8,9 +8,13 @@ import koaBody from 'koa-body'
 
 import config from '@server/config'
 import connect from '@server/connection'
-import '@server/models'
-import { LogMiddleware, ValidateMiddleware } from '@server/middlewares'
-import { FeedbackController } from '@server/controllers'
+import '@server/service/mongodb'
+import {
+  LogMiddleware,
+  ValidateMiddleware,
+  ReturnMiddleware
+} from '@server/middlewares'
+import { AppController, FeedbackController } from '@server/controllers'
 
 connect()
 const app = new Koa()
@@ -52,10 +56,11 @@ app.use(async (ctx, next) => {
 
 app.use(LogMiddleware())
 app.use(ValidateMiddleware())
+app.use(ReturnMiddleware())
 
 const api = new Router({ prefix: '/api' })
-api.get('/list', FeedbackController.list)
-api.get('/error', FeedbackController.error)
+api.get('/app/list', AppController.list)
+api.post('/app/save', AppController.save)
 api.post('/receive', FeedbackController.receive)
 app.use(api.routes())
 

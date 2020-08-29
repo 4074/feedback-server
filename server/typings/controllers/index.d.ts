@@ -1,12 +1,12 @@
 declare namespace Model {
   interface App {
     name: string
-    appId: string
-    appKey: string
-    timestamp: number
+    appId?: string
+    hosts: string[]
+    timestamp?: number
   }
 
-  interface Feecback {
+  interface Feedback {
     appId: string
     path: string
     userAgent: string
@@ -18,17 +18,13 @@ declare namespace Model {
   }
 }
 
-declare namespace Params {
-  namespace Feedback {
-    interface List {
-      uid: number
+declare namespace API {
+  namespace AppController {
+    interface ListData {
+      apps: Model.App[]
     }
-  }
 
-  namespace App {
-    interface Save extends Model.App {
-      appId: string | undefined
-      appKey: string | undefined
-    }
+    type SaveParams = Model.App
+    type SaveData = Model.App
   }
 }

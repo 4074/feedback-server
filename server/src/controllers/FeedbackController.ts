@@ -5,7 +5,7 @@ export async function list(ctx: Koa.Context): Promise<void> {
 }
 
 export async function receive(ctx: Koa.Context): Promise<void> {
-  const params: Params.Feedback.List = ctx.validate(ctx.request.body, {
+  const params: any = ctx.validate(ctx.request.body, {
     uid: 'number'
   })
   ctx.body = params

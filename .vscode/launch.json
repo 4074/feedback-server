@@ -9,14 +9,14 @@
             "request": "launch",
             "type": "chrome",
             "port": 9222,
-            "url": "http://localhost:5431/",
+            "url": "http://localhost:4040/",
             "webRoot": "${workspaceFolder}/app",
             "userDataDir": false
         }, {
             "type": "node",
             "request": "attach",
             "name": "Launch Node",
-            "processId": "${command:PickProcess}",
+            "port": 4029,
             "restart": true,
             "protocol": "inspector",
         }

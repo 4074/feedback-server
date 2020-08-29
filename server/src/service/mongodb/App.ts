@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 
-const schema = new mongoose.Schema({
+const schema = new mongoose.Schema<Model.App>({
   name: String,
   appId: String,
-  appKey: String,
   hosts: Array,
+  timestamp: Number,
   createAt: Date
 })
 

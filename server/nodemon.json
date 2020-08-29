@@ -1,7 +1,7 @@
 {
 	"verbose": true,
 	"debug": false,
-	"exec": "node -r ts-node/register -r tsconfig-paths/register --inspect=9299 ./src/index.ts",
+	"exec": "node -r ts-node/register -r tsconfig-paths/register --inspect=4029 ./src/index.ts",
 	"ignore": [
 	],
 	"watch": ["./src"],
