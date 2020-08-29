@@ -14,6 +14,11 @@ export default class BaseService {
     return []
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async findAppById(appId: string): Promise<Model.App | null> {
+    return null
+  }
+
   async saveApp(params: Model.App): Promise<Model.App> {
     return params
   }

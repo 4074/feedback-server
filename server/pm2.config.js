@@ -3,7 +3,8 @@ module.exports = {
     name: 'feedback-server',
     script: 'build/index.js',
     env: {
-      NODE_ENV: 'production'
+      NODE_ENV: 'production',
+      PM2: '1'
     }
   }]
 }

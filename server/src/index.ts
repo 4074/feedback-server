@@ -61,15 +61,19 @@ app.use(ReturnMiddleware())
 const api = new Router({ prefix: '/api' })
 api.get('/app/list', AppController.list)
 api.post('/app/save', AppController.save)
-api.post('/receive', FeedbackController.receive)
+api.get('/feedback/list', FeedbackController.list)
 app.use(api.routes())
 
 app.listen(config.port, () => {
   // eslint-disable-next-line no-console
   console.log(
-    'Server running on port',
+    'API server running on port',
     config.port,
     '\nenv',
     config.isProduction ? 'production' : 'development'
   )
 })
+
+if (!config.isPm2) {
+  import('./receive')
+}

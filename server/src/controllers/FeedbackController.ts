@@ -1,14 +1,55 @@
 import Koa from 'koa'
+import service from '@server/service'
+import storage from '@server/storage'
 
-export async function list(ctx: Koa.Context): Promise<void> {
-  ctx.body = []
+export async function list(): Promise<Model.Feedback[]> {
+  return []
 }
 
-export async function receive(ctx: Koa.Context): Promise<void> {
-  const params: any = ctx.validate(ctx.request.body, {
-    uid: 'number'
+export async function receive(ctx: Koa.Context): Promise<boolean> {
+  const params: Model.Feedback = ctx.validate(ctx.request.body, {
+    appId: 'string',
+    path: 'string',
+    userAgent: 'string',
+    user: 'string',
+    action: 'string',
+    data: 'object',
+    message: 'string'
   })
-  ctx.body = params
+
+  const app = await service.findAppById(params.appId)
+  if (!app) ctx.throw(400, 'Expected a valid appId')
+
+  if (app.hosts && app.hosts.length) {
+    const matches = (ctx.request.path || '').match(/https?:\/\/(.+)\//)
+    if (!matches || matches.length < 2) {
+      ctx.throw(400, 'Expected request from a valid host')
+    }
+
+    const host = matches[1]
+    let has = false
+    for (const h of Object.values(app.hosts)) {
+      if (host.indexOf(h) >= 0) {
+        has = true
+        break
+      }
+    }
+
+    if (!has) ctx.throw(400, 'Expected request from a valid host')
+  }
+
+  if (params.action === 'feedback') {
+    if (ctx.request.files) {
+      const files: any[] = Object.values(ctx.request.files)
+      const images = await storage.upload(files)
+      params.images = images
+    }
+    await service.saveFeedback(params)
+  } else {
+    await service.saveFeedback(params)
+  }
+
+  return true
 }
 
 export async function error(): Promise<void> {

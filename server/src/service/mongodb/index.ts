@@ -18,6 +18,11 @@ export default class MongodbService extends BaseService {
     return records
   }
 
+  async findAppById(appId: string): Promise<Model.App | null> {
+    const record = await App.findOne({ appId })
+    if (record) return record.toObject()
+  }
+
   async saveApp(params: Model.App): Promise<Model.App> {
     let app: any
 

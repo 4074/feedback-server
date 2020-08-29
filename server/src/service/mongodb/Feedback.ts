@@ -5,8 +5,10 @@ const schema = new mongoose.Schema({
   path: String,
   userAgent: String,
   user: String,
+  action: String,
   data: Object,
   message: String,
+  images: Array,
   timestamp: Number,
   createAt: Date
 })

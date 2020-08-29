@@ -11,8 +11,10 @@ declare namespace Model {
     path: string
     userAgent: string
     user: string
+    action: 'open' | 'feedback'
     data: Record<string, any>
     message: string
+    images?: string[]
     timestamp: number
     createAt: Date
   }
