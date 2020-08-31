@@ -28,6 +28,10 @@ export class Service extends BaseSerice {
     return this.instance.findApps()
   }
 
+  async findAppById(appId: string): Promise<Model.App | null> {
+    return this.instance.findAppById(appId)
+  }
+
   async saveApp(params: Model.App): Promise<Model.App> {
     return this.instance.saveApp(params)
   }

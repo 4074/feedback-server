@@ -1,10 +1,10 @@
 import Koa from 'koa'
 import Router from 'koa-router'
 import koaBody from 'koa-body'
+import cors from '@koa/cors'
 
 import config from '@server/config'
-import connect from '@server/connection'
-import '@server/service/mongodb'
+
 import {
   LogMiddleware,
   ValidateMiddleware,
@@ -12,7 +12,6 @@ import {
 } from '@server/middlewares'
 import { FeedbackController } from '@server/controllers'
 
-connect()
 const app = new Koa()
 
 app.use(
@@ -29,7 +28,7 @@ app.use(ValidateMiddleware())
 app.use(ReturnMiddleware())
 
 const api = new Router()
-api.post('/receive', FeedbackController.receive)
+api.post('/receive', cors(), FeedbackController.receive)
 app.use(api.routes())
 
 app.listen(config.receivePort, () => {

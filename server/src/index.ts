@@ -7,8 +7,7 @@ import Router from 'koa-router'
 import koaBody from 'koa-body'
 
 import config from '@server/config'
-import connect from '@server/connection'
-import '@server/service/mongodb'
+
 import {
   LogMiddleware,
   ValidateMiddleware,
@@ -16,7 +15,6 @@ import {
 } from '@server/middlewares'
 import { AppController, FeedbackController } from '@server/controllers'
 
-connect()
 const app = new Koa()
 
 app.use(

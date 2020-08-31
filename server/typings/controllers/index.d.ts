@@ -13,7 +13,7 @@ declare namespace Model {
     user: string
     action: 'open' | 'feedback'
     data: Record<string, any>
-    message: string
+    message?: string
     images?: string[]
     timestamp: number
     createAt: Date

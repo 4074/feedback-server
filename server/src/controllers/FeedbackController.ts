@@ -9,16 +9,14 @@ export async function list(): Promise<Model.Feedback[]> {
 export async function receive(ctx: Koa.Context): Promise<boolean> {
   const params: Model.Feedback = ctx.validate(ctx.request.body, {
     appId: 'string',
-    path: 'string',
-    userAgent: 'string',
     user: 'string',
     action: 'string',
-    data: 'object',
-    message: 'string'
+    data: 'string',
+    message: { type: 'string', optional: true }
   })
 
   const app = await service.findAppById(params.appId)
-  if (!app) ctx.throw(400, 'Expected a valid appId')
+  if (!app) ctx.throw(400, 'Expected a valid appId:', params.appId)
 
   if (app.hosts && app.hosts.length) {
     const matches = (ctx.request.path || '').match(/https?:\/\/(.+)\//)
@@ -38,9 +36,17 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
     if (!has) ctx.throw(400, 'Expected request from a valid host')
   }
 
+  params.path = ctx.header.referer || params.path
+  params.userAgent = ctx.header['user-agent']
+  try {
+    params.data = JSON.parse(params.data as any)
+  } catch (_) {
+    //
+  }
+
   if (params.action === 'feedback') {
     if (ctx.request.files) {
-      const files: any[] = Object.values(ctx.request.files)
+      const files = Object.values(ctx.request.files)
       const images = await storage.upload(files)
       params.images = images
     }

@@ -2,6 +2,11 @@ import config from '@server/config'
 import BaseStorage from './BaseStorage'
 import AwsStorage from './AwsStorage'
 
+export interface UploadFile {
+  path: string
+  name: string
+}
+
 export class Storage extends BaseStorage {
   instance: BaseStorage
 
@@ -17,7 +22,7 @@ export class Storage extends BaseStorage {
     }
   }
 
-  async upload(files: File[]): Promise<string[]> {
+  async upload(files: UploadFile[]): Promise<string[]> {
     return this.instance.upload(files)
   }
 }
