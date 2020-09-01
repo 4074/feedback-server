@@ -1,4 +1,7 @@
+import path from 'path'
+
 import Koa from 'koa'
+import staticCache from 'koa-static-cache'
 import Router from 'koa-router'
 import koaBody from 'koa-body'
 import cors from '@koa/cors'
@@ -22,6 +25,9 @@ app.use(
     }
   })
 )
+
+const appStaticPath = path.resolve(`${__dirname}/../sdks/`)
+app.use(staticCache(appStaticPath))
 
 app.use(LogMiddleware())
 app.use(ValidateMiddleware())

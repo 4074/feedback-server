@@ -73,5 +73,5 @@ app.listen(config.port, () => {
 })
 
 if (!config.isPm2) {
-  import('./receive')
+  import('./public')
 }
