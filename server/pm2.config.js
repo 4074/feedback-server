@@ -7,6 +7,14 @@ module.exports = {
         NODE_ENV: 'production',
         PM2: '1'
       }
+    },
+    {
+      name: 'feedback-server-public',
+      script: 'build/public.js',
+      env: {
+        NODE_ENV: 'production',
+        PM2: '1'
+      }
     }
   ]
 }
