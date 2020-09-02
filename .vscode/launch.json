@@ -5,17 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Chrome",
-            "request": "launch",
+            "name": "Client",
+            "request": "attach",
             "type": "chrome",
             "port": 9222,
             "url": "http://localhost:4010/",
-            "webRoot": "${workspaceFolder}/app",
-            "userDataDir": false
+            "webRoot": "${workspaceFolder}/app"
         }, {
             "type": "node",
             "request": "attach",
-            "name": "Launch Node",
+            "name": "Server",
             "port": 4029,
             "restart": true,
             "protocol": "inspector",
