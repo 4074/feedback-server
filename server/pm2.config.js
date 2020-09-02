@@ -1,10 +1,12 @@
 module.exports = {
-  apps: [{
-    name: 'feedback-server',
-    script: 'build/index.js',
-    env: {
-      NODE_ENV: 'production',
-      PM2: '1'
+  apps: [
+    {
+      name: 'feedback-server',
+      script: 'build/index.js',
+      env: {
+        NODE_ENV: 'production',
+        PM2: '1'
+      }
     }
-  }]
+  ]
 }
