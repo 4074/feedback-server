@@ -3,7 +3,26 @@ declare namespace Model {
     name: string
     appId?: string
     hosts: string[]
+    actions?: AppAction[]
     timestamp?: number
+  }
+
+  type AppActionType = 'popo' | 'udata-question'
+
+  interface AppAction {
+    type: AppActionType
+    on?: {
+      field: 'host' | 'user'
+      test: string
+    }
+  }
+
+  interface AppPopoAction extends AppAction {
+    receiver: string[]
+  }
+
+  interface AppUdataQuestionAction {
+    project: string
   }
 
   interface Feedback {

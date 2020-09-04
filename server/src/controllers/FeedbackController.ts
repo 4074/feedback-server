@@ -1,6 +1,7 @@
 import Koa from 'koa'
-import service from '@server/service'
-import storage from '@server/storage'
+import Service from '@server/service'
+import Storage from '@server/storage'
+import runner from '@server/runner'
 
 export async function list(): Promise<Model.Feedback[]> {
   return []
@@ -15,7 +16,7 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
     message: { type: 'string', optional: true }
   })
 
-  const app = await service.findAppById(params.appId)
+  const app = await Service.findAppById(params.appId)
   if (!app) ctx.throw(400, 'Expected a valid appId:', params.appId)
 
   if (app.hosts && app.hosts.length) {
@@ -47,12 +48,13 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
   if (params.action === 'feedback') {
     if (ctx.request.files) {
       const files = Object.values(ctx.request.files)
-      const images = await storage.upload(files)
+      const images = await Storage.upload(files)
       params.images = images
     }
-    await service.saveFeedback(params)
+    await Service.saveFeedback(params)
+    runner(app, params)
   } else {
-    await service.saveFeedback(params)
+    await Service.saveFeedback(params)
   }
 
   return true

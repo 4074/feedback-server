@@ -1,8 +1,8 @@
 import Koa from 'koa'
-import service from '@server/service'
+import Service from '@server/service'
 
 export async function list(): Promise<API.AppController.ListData> {
-  const apps = await service.findApps()
+  const apps = await Service.findApps()
   return { apps }
 }
 
@@ -13,6 +13,6 @@ export async function save(
     name: 'string',
     hosts: 'array'
   })
-  const app = await service.saveApp(params)
+  const app = await Service.saveApp(params)
   return app
 }
