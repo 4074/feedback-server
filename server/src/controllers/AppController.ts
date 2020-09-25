@@ -1,6 +1,11 @@
 import Koa from 'koa'
 import Service from '@server/service'
 
+export async function meta(): Promise<API.AppController.MetaData> {
+  const actionTypes: Model.AppActionType[] = ['popo', 'udata-question']
+  return { actionTypes }
+}
+
 export async function list(): Promise<API.AppController.ListData> {
   const apps = await Service.findApps()
   return { apps }

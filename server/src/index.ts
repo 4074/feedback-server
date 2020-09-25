@@ -57,6 +57,7 @@ app.use(ValidateMiddleware())
 app.use(ReturnMiddleware())
 
 const api = new Router({ prefix: '/api' })
+api.get('/app/meta', AppController.meta)
 api.get('/app/list', AppController.list)
 api.post('/app/save', AppController.save)
 api.get('/feedback/list', FeedbackController.list)

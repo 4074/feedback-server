@@ -41,6 +41,10 @@ declare namespace Model {
 
 declare namespace API {
   namespace AppController {
+    interface MetaData {
+      actionTypes: Model.AppActionType[]
+    }
+
     interface ListData {
       apps: Model.App[]
     }

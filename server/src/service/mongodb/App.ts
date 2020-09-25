@@ -5,6 +5,7 @@ const schema = new mongoose.Schema<Model.App>(
     name: String,
     appId: String,
     hosts: Array,
+    actions: Array,
     timestamp: Number,
     createAt: Date
   },
