@@ -25,7 +25,17 @@
   },
   "proxy": "http://localhost:4000",
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ],
+      "semi": [
+        2,
+        "never"
+      ]
+    }
   },
   "browserslist": {
     "production": [
