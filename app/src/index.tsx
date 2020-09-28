@@ -9,8 +9,7 @@ function render(Component: () => JSX.Element) {
   ReactDOM.render(
     <ReduxProvider >
       <Component />
-    </ReduxProvider>
-    ,
+    </ReduxProvider>,
     $root
   )
 }
