@@ -10,6 +10,6 @@ declare namespace Redux {
   }
 
   interface AppState extends LoadState {
-    data?: any[]
+    data?: API.AppController.ListData
   }
 }

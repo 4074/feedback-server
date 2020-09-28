@@ -20,7 +20,7 @@ const { actions, reducer } = createSlice({
     },
     loadSuccess: {
       reducer: helper.loadSuccess(),
-      prepare: helper.payloadPrepare<any[]>()
+      prepare: helper.payloadPrepare<API.AppController.ListData>()
     }
   }
 })
