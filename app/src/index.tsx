@@ -1,12 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import ReduxProvider from './ReduxProvider'
 import App from './App'
 
 const $root = document.getElementById('root')
 
 function render(Component: () => JSX.Element) {
   ReactDOM.render(
-    <Component />,
+    <ReduxProvider >
+      <Component />
+    </ReduxProvider>
+    ,
     $root
   )
 }

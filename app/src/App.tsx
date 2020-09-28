@@ -1,16 +1,19 @@
 import React from 'react'
+import { Router } from '@reach/router'
 
-import { Button } from 'antd'
-import Header from './Header'
+import { Header, Home, Fx } from './pages'
 
 import 'antd/dist/antd.less'
 import './styles/main.scss'
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <Header />
-      <Button>Click</Button>
+      <Router>
+        <Home path='/' />
+        <Fx path='fx' />
+      </Router>
     </div>
   )
 }
