@@ -1,14 +1,24 @@
-import { PayloadAction } from "@reduxjs/toolkit"
+import { PayloadAction, Draft } from "@reduxjs/toolkit"
 
-function load<T extends { loading: boolean, loaded: boolean, error?: Error }>() {
-  return (state: T) => ({...state, loading: true, loaded: false, error: null})
+function load<S extends Redux.LoadState>(): (state: Draft<S>) => S {
+  return (state: Draft<S>): S => {
+    state.loading = true
+    return state as S
+  }
 }
 
-function loadFail<T extends { loading: boolean, loaded: boolean, error?: Error }>() {
-  return (state: T, action: PayloadAction<Error>) => ({...state, loading: false, loaded: false, error: action.payload})
+// export declare type CaseReducerWithPrepare<State, Action extends PayloadAction> = {
+//   reducer: CaseReducer<State, Action>;
+//   prepare: PrepareAction<Action['payload']>;
+// };
+
+function loadFail<S extends Redux.LoadState>(): (state: Draft<S>, action: PayloadAction<Error>) => S {
+  return (state: Draft<S>, action: PayloadAction<Error>) => {
+    return {...state, loading: false, loaded: false, error: action.payload} as S
+  }
 }
 
-function loadSuccess<T extends { loading: boolean, loaded: boolean, error?: Error, data?: R }, R>() {
+function loadSuccess<T extends Redux.LoadState & { data?: R }, R>() {
   return (state: T, action: PayloadAction<R>) => ({...state, loading: false, loaded: true, error: null, data: action.payload})
 }
 

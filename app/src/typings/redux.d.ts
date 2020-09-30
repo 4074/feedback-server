@@ -3,7 +3,7 @@ declare namespace Redux {
     app: AppState
   }
 
-  interface LoadState {
+  interface LoadState extends object {
     loading: boolean
     loaded: boolean
     error?: Error
