@@ -13,7 +13,7 @@ export default {
   isProduction,
 
   database: 'mongodb',
-  mongodb: env.MONGODB,
+  mongodb: env.MONGODB || 'localhost:',
 
   storage: 'aws',
   aws: {
