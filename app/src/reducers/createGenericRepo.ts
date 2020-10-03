@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
+import { createSlice, combineReducers, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
+import { Reducer, CombinedState } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 
 import service from '../service'
@@ -51,40 +52,73 @@ const createGenericSlice = <
 }
 
 export default function createGenericRepo<
-  T,
-  Reducers extends SliceCaseReducers<GenericState<T>>,
-  P
+  E extends (...args: any) => Promise<any>,
 >(
     name: string,
-    initialState: GenericState<T>,
-    effect: (params: P) => Promise<T>
+    effect: E
   ) {
+
+  type T = E extends (...args: any) => Promise<infer R> ? R : never
+  type H = E extends (...args: infer R) => Promise<T> ? (...args: R) => Promise<void> : never
+
+  const initialState = { status: 'none' } as GenericState<T>
+
   const slice = createGenericSlice({
     name,
     initialState,
     reducers: {}
   })
 
-  function hook(): [GenericState<T>, (params: P) => Promise<void>] {
+  function hook(): [GenericState<T>, H] {
     const data = useSelector<any, GenericState<T>>(state => state[name])
     const dispacth = useDispatch()
     const actions = slice.actions
   
-    const load = async (params: P) => {
+    const load = (async (...params) => {
       dispacth(actions.start())
       try {
-        const result = await effect(params)
+        const result = await effect(...params)
         dispacth(actions.success(result))
       } catch (error) {
         dispacth(actions.fail(error))
       }
-    }
+    }) as H
   
     return [data, load]
   }
 
   return {
     slice,
+    reducer: {
+      [name]: slice.reducer
+    },
     hook
+  }
+}
+
+type EffectHook<
+  E extends (...args: any) => Promise<any>,
+  T = E extends (...args: any) => Promise<infer R> ? R : never,
+  H = E extends (...args: infer R) => Promise<T> ? (...args: R) => Promise<void> : never
+> = () => [GenericState<T>, H]
+
+export function createRepos<
+  L extends {[key: string]: E},
+  E extends (...args: any) => Promise<any>,
+  T = E extends (...args: any) => Promise<infer R> ? R : never
+>(list: L): { reducer: Reducer<CombinedState<{ [x: string]: any; }>, never>, hooks: {[k in keyof L]: EffectHook<L[k]>} } {
+
+  const reducers: any = {}
+  const hooks: any = {}
+
+  for (const [name, effect] of Object.entries(list)) {
+    const repo = createGenericRepo(name, effect)
+    reducers[name] = repo.reducer
+    hooks[name] = repo.reducer
+  }
+
+  return {
+    reducer: combineReducers(reducers),
+    hooks
   }
 }

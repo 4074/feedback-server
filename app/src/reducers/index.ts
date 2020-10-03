@@ -1,17 +1,23 @@
 import { combineReducers } from 'redux'
 import service from 'service'
 import app from './app'
-import createGenericRepo, { GenericState } from './createGenericRepo'
+import createGenericRepo, { createRepos } from './createGenericRepo'
 
 const repo = createGenericRepo(
   'repo',
-  { status: 'none' } as GenericState<string>,
   service.app.list
 )
 
 export const useRepo = repo.hook
+useRepo()[0].data
+
+const repos = createRepos({
+  app: service.app.list
+})
+
+repos.hooks.app()[0].data?.apps
 
 export default combineReducers({
   app,
-  repo: repo.slice.reducer
+  ...repo.reducer
 })
