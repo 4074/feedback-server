@@ -2,8 +2,6 @@ import { createSlice, combineReducers, PayloadAction, SliceCaseReducers, Validat
 import { Reducer, CombinedState } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 
-import service from '../service'
-
 export interface GenericState<T> {
   data?: T
   error?: Error,
@@ -104,8 +102,7 @@ type EffectHook<
 
 export function createRepos<
   L extends {[key: string]: E},
-  E extends (...args: any) => Promise<any>,
-  T = E extends (...args: any) => Promise<infer R> ? R : never
+  E extends (...args: any) => Promise<any>
 >(list: L): { reducer: Reducer<CombinedState<{ [x: string]: any; }>, never>, hooks: {[k in keyof L]: EffectHook<L[k]>} } {
 
   const reducers: any = {}
