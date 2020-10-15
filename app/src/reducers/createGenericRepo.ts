@@ -51,20 +51,20 @@ const createGenericSlice = <
 
 export default function createGenericRepo<
   E extends (...args: any) => Promise<any>,
+  T = E extends (...args: any) => Promise<infer R> ? R : never,
+  H = E extends (...args: infer R) => Promise<T> ? (...args: R) => Promise<void> : never
 >(
     name: string,
-    effect: E
+    effect: E,
+    reducers: ValidateSliceCaseReducers<GenericState<T>, SliceCaseReducers<GenericState<T>>> = {}
   ) {
-
-  type T = E extends (...args: any) => Promise<infer R> ? R : never
-  type H = E extends (...args: infer R) => Promise<T> ? (...args: R) => Promise<void> : never
 
   const initialState = { status: 'none' } as GenericState<T>
 
   const slice = createGenericSlice({
     name,
     initialState,
-    reducers: {}
+    reducers
   })
 
   function hook(): [GenericState<T>, H] {
@@ -72,7 +72,7 @@ export default function createGenericRepo<
     const dispacth = useDispatch()
     const actions = slice.actions
   
-    const load = (async (...params) => {
+    const load = (async (...params: any[]) => {
       dispacth(actions.start())
       try {
         const result = await effect(...params)
@@ -80,7 +80,7 @@ export default function createGenericRepo<
       } catch (error) {
         dispacth(actions.fail(error))
       }
-    }) as H
+    }) as any
   
     return [data, load]
   }
