@@ -6,18 +6,22 @@ import createGenericRepo, { createRepos } from './createGenericRepo'
 
 const repo = createGenericRepo(
   'repo',
-  service.app.list,
-  {
-    // save: {
-    //   reducer: (state, action: PayloadAction<API.AppController.SaveData>) => {
-    //     state.data?.apps[0].name
-    //   }
-    // }
-  }
+  service.app.list
 )
-
+repo.slice.actions
 export const useRepo = repo.hook
 useRepo()[1]()
+
+const save = createGenericRepo(
+  'save',
+  service.app.list
+)
+
+save.handles.success.push((dispatch) => {
+  dispatch(repo.slice.actions.reducer((state) => {
+    state.data?.apps
+  }))
+})
 
 const repos = createRepos({
   app: service.app.list

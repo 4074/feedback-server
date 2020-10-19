@@ -1,11 +1,18 @@
 import { createSlice, combineReducers, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
-import { Reducer, CombinedState } from 'redux'
+import { Reducer, CombinedState, Dispatch } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 
 export interface GenericState<T> {
   data?: T
   error?: Error,
   status: 'none' | 'loading' | 'finished' | 'error'
+}
+
+interface EffectHandleFunction {
+  (dispatch: Dispatch): any
+}
+export interface EffectHandles {
+  success: EffectHandleFunction[]
 }
 
 const createGenericSlice = <
@@ -44,6 +51,10 @@ const createGenericSlice = <
         state.status = 'finished'
       },
 
+      reducer(state: GenericState<T>, action: PayloadAction<(state: GenericState<T>) => void>) {
+        action.payload(state)
+      },
+
       ...reducers
     }
   })
@@ -67,15 +78,22 @@ export default function createGenericRepo<
     reducers
   })
 
+  const handles: EffectHandles = {
+    success: []
+  }
+
   function hook(): [GenericState<T>, H] {
     const data = useSelector<any, GenericState<T>>(state => state[name])
     const dispacth = useDispatch()
     const actions = slice.actions
-  
+
     const load = (async (...params: any[]) => {
       dispacth(actions.start())
       try {
         const result = await effect(...params)
+        for (const handle of handles.success) {
+          handle(dispacth)
+        }
         dispacth(actions.success(result))
       } catch (error) {
         dispacth(actions.fail(error))
@@ -90,7 +108,8 @@ export default function createGenericRepo<
     reducer: {
       [name]: slice.reducer
     },
-    hook
+    hook,
+    handles
   }
 }
 
