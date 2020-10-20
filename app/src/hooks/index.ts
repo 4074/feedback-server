@@ -1,1 +1,1 @@
-export { useApp } from 'reducers/app'
+export default {}

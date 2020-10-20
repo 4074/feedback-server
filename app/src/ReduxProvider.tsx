@@ -1,10 +1,10 @@
 import React from 'react'
-import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
 
-import reducer from './reducers'
+import reducer from './reducer'
 
-const store = createStore(reducer)
+const store = configureStore({reducer})
 
 interface ReduxProviderProps {
   children: JSX.Element | JSX.Element[]

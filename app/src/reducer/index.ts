@@ -1,5 +1,4 @@
 // import { PayloadAction } from '@reduxjs/toolkit'
-import { combineReducers } from 'redux'
 import service from 'service'
 // import app from './app'
 import createGenericRepo, { createRepos } from './createGenericRepo'
@@ -35,6 +34,6 @@ const app = createGenericRepo(
 )
 export const useApp = app.hook
 
-export default combineReducers({
+export default {
   ...app.reducer
-})
+}

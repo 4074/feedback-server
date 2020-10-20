@@ -1,6 +1,6 @@
 import React from 'react'
 import { useMount, useUpdateEffect } from 'react-use'
-import { useApp } from 'reducers'
+import { useApp } from 'reducer'
 import { RouteComponentProps } from '@reach/router'
 
 import { message } from 'antd'
