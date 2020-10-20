@@ -1,7 +1,7 @@
 // import { PayloadAction } from '@reduxjs/toolkit'
 import service from 'service'
 // import app from './app'
-import createGenericRepo, { createRepos } from './createGenericRepo'
+import createGenericRepo from './createGenericRepo'
 
 // const repo = createGenericRepo(
 //   'repo',

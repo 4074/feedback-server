@@ -3,9 +3,23 @@
     "editor.tabSize": 2,
     "eslint.trace.server": "messages",
     "eslint.workingDirectories": [
-        "./app", "./server"
+        "./app",
+        "./server"
     ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
+    },
+
+    // stylelint settings
+    "stylelint.enable": true,
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false,
+    "[scss]": {
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.stylelint": true
+        },
+        "editor.foldingStrategy": "indentation"
     }
 }
