@@ -8,7 +8,10 @@ import Feedback from './Feedback'
 export default class MongodbService extends BaseService {
   async setup(): Promise<void> {
     await super.setup()
-    await mongoose.connect(config.mongodb, { useNewUrlParser: true })
+    await mongoose.connect(config.mongodb, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
     // eslint-disable-next-line no-console
     console.log('mongodb connected')
   }

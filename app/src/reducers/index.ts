@@ -30,6 +30,5 @@ const repos = createRepos({
 repos.hooks.app()[0].data?.apps
 
 export default combineReducers({
-  app,
-  ...repo.reducer
+  app
 })

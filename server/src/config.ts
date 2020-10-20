@@ -8,7 +8,7 @@ const isProduction = env.ENV === 'PRODUCTION'
 
 export default {
   port: env.PORT || 4000,
-  receivePort: env.RECEIVE_PORT || 4040,
+  publicPort: env.RECEIVE_PORT || 4040,
   isPm2,
   isProduction,
 

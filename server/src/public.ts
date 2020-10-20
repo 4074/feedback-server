@@ -2,8 +2,8 @@ import path from 'path'
 
 import Koa from 'koa'
 import staticCache from 'koa-static-cache'
-import Router from 'koa-router'
 import koaBody from 'koa-body'
+import koaCompose from 'koa-compose'
 import cors from '@koa/cors'
 
 import config from '@server/config'
@@ -13,7 +13,7 @@ import {
   ValidateMiddleware,
   ReturnMiddleware
 } from '@server/middlewares'
-import { FeedbackController } from '@server/controllers'
+import { receive } from '@server/controllers/FeedbackController'
 
 const app = new Koa()
 
@@ -33,15 +33,18 @@ app.use(LogMiddleware())
 app.use(ValidateMiddleware())
 app.use(ReturnMiddleware())
 
-const api = new Router()
-api.post('/receive', cors(), FeedbackController.receive)
-app.use(api.routes())
+app.use(async (ctx: Koa.Context, next: () => any) => {
+  if (ctx.method === 'POST' && ctx.path === '/receive') {
+    return koaCompose([cors, receive])(ctx, next)
+  }
+  return next()
+})
 
-app.listen(config.receivePort, () => {
+app.listen(config.publicPort, () => {
   // eslint-disable-next-line no-console
   console.log(
     'Receive server running on port',
-    config.receivePort,
+    config.publicPort,
     '\nenv',
     config.isProduction ? 'production' : 'development'
   )

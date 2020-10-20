@@ -3,8 +3,8 @@ import path from 'path'
 
 import Koa from 'koa'
 import koaStatic from 'koa-static'
-import Router from 'koa-router'
 import koaBody from 'koa-body'
+import koaAutoboot from 'koa-autoboot'
 
 import config from '@server/config'
 
@@ -13,7 +13,6 @@ import {
   ValidateMiddleware,
   ReturnMiddleware
 } from '@server/middlewares'
-import { AppController, FeedbackController } from '@server/controllers'
 
 const app = new Koa()
 
@@ -56,12 +55,12 @@ app.use(LogMiddleware())
 app.use(ValidateMiddleware())
 app.use(ReturnMiddleware())
 
-const api = new Router({ prefix: '/api' })
-api.get('/app/meta', AppController.meta)
-api.get('/app/list', AppController.list)
-api.post('/app/save', AppController.save)
-api.get('/feedback/list', FeedbackController.list)
-app.use(api.routes())
+app.use(
+  koaAutoboot({
+    dir: path.join(__dirname, 'controllers'),
+    prefix: 'api'
+  })
+)
 
 app.listen(config.port, () => {
   // eslint-disable-next-line no-console

@@ -1,23 +1,32 @@
+/* eslint-disable class-methods-use-this */
 import Koa from 'koa'
+import { Controller, Get, Post } from 'koa-autoboot'
 import Service from '@server/service'
 
-export async function meta(): Promise<API.AppController.MetaData> {
-  const actionTypes: Model.AppActionType[] = ['popo', 'udata-question']
-  return { actionTypes }
-}
+@Controller()
+export default class AppController {
+  @Get()
+  async meta(): Promise<API.AppController.MetaData> {
+    const actionTypes: Model.AppActionType[] = ['popo', 'udata-question']
+    return { actionTypes }
+  }
 
-export async function list(): Promise<API.AppController.ListData> {
-  const apps = await Service.findApps()
-  return { apps }
-}
+  @Get()
+  async list(): Promise<API.AppController.ListData> {
+    const apps = await Service.findApps()
+    return { apps }
+  }
 
-export async function save(
-  ctx: Koa.Context
-): Promise<API.AppController.SaveData> {
-  const params: API.AppController.SaveParams = ctx.validate(ctx.request.body, {
-    name: 'string',
-    hosts: 'array'
-  })
-  const app = await Service.saveApp(params)
-  return app
+  @Post()
+  async save(ctx: Koa.Context): Promise<API.AppController.SaveData> {
+    const params: API.AppController.SaveParams = ctx.validate(
+      ctx.request.body,
+      {
+        name: 'string',
+        hosts: 'array'
+      }
+    )
+    const app = await Service.saveApp(params)
+    return app
+  }
 }

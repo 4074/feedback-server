@@ -1,10 +1,26 @@
+/* eslint-disable class-methods-use-this */
 import Koa from 'koa'
+import { Controller, Get } from 'koa-autoboot'
 import Service from '@server/service'
 import Storage from '@server/storage'
 import runner from '@server/runner'
 
 export async function list(): Promise<Model.Feedback[]> {
   return []
+}
+
+@Controller()
+export default class FeecbackController {
+  @Get()
+  async list(): Promise<Model.Feedback[]> {
+    return []
+  }
+
+  @Get()
+  async error(): Promise<void> {
+    let b: number[]
+    b.push(1)
+  }
 }
 
 export async function receive(ctx: Koa.Context): Promise<boolean> {
@@ -58,9 +74,4 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
   }
 
   return true
-}
-
-export async function error(): Promise<void> {
-  let b: number[]
-  b.push(1)
 }
