@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  height: 32px;
+  line-height: 32px;
+  margin-bottom: 16px;
+
+  .left {
+    font-weight: normal;
+    line-height: 32px;
+    font-size: 20px;
+    margin-bottom: 0;
+  }
+
+  .right {
+    flex: 10;
+  }
+}

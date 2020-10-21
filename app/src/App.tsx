@@ -1,10 +1,10 @@
 import React from 'react'
 import { Router } from '@reach/router'
 
-import { Header, Home, Fx } from './pages'
-
 import 'antd/dist/antd.less'
 import './styles/main.scss'
+
+import { Header, Home, Fx } from './pages'
 
 function App() {
   return (

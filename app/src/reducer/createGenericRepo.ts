@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import { createSlice, combineReducers, PayloadAction, SliceCaseReducers, ValidateSliceCaseReducers } from '@reduxjs/toolkit'
 import { Reducer, CombinedState, Dispatch } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
@@ -65,10 +67,10 @@ export default function createGenericRepo<
   T = E extends (...args: any) => Promise<infer R> ? R : never,
   H = E extends (...args: infer R) => Promise<T> ? (...args: R) => Promise<void> : never
 >(
-    name: string,
-    effect: E,
-    reducers: ValidateSliceCaseReducers<GenericState<T>, SliceCaseReducers<GenericState<T>>> = {}
-  ) {
+  name: string,
+  effect: E,
+  reducers: ValidateSliceCaseReducers<GenericState<T>, SliceCaseReducers<GenericState<T>>> = {}
+) {
 
   const initialState = { status: 'none' } as GenericState<T>
 
