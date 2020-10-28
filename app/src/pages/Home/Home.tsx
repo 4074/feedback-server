@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMount, useUpdateEffect } from 'react-use'
-import { useApp } from 'reducer'
+import { useApp, useAppSave } from 'reducer'
 import { RouteComponentProps } from '@reach/router'
 
 import { Button, message, Modal } from 'antd'
@@ -12,6 +12,7 @@ import styles from './Home.module.scss'
 
 export default function Home(props: RouteComponentProps) {
   const [app, load] = useApp()
+  const [saveData, save] = useAppSave()
 
   useMount(() => app.status !== 'loading' && app.status !== 'finished' && load())
   useUpdateEffect(() => {
@@ -19,6 +20,11 @@ export default function Home(props: RouteComponentProps) {
   }, [app.error])
 
   const [modalVisible, setModalVisible] = useState(false)
+  const [appEditing, setAppEditing] = useState<Model.App>({name: '', actions: [], hosts: []})
+
+  const handleSave = () => {
+    save(appEditing)
+  }
 
   return <div className={`content-container ${styles.container}`}>
     <ContentHeader title="Apps">
@@ -40,10 +46,14 @@ export default function Home(props: RouteComponentProps) {
     <Modal
       title="Edit"
       visible={modalVisible}
+      width={600}
       okText="Save"
       onCancel={() => setModalVisible(false)}
+      onOk={handleSave}
+      okButtonProps={{loading: saveData && saveData.status === 'loading'}}
+      maskClosable={false}
     >
-      <Editor dataSource={{name: 'name', actions: [], hosts: []}} />
+      <Editor dataSource={appEditing} onChange={setAppEditing} />
     </Modal>
   </div>
 }

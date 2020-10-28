@@ -34,6 +34,10 @@ const app = createGenericRepo(
 )
 export const useApp = app.hook
 
+const appSave = createGenericRepo('appSave', service.app.save)
+export const useAppSave = appSave.hook
+
 export default {
-  ...app.reducer
-}
+  ...app.reducer,
+  ...appSave.reducer
+} as any
