@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { useMount, useUpdateEffect, useUpdate } from 'react-use'
-import { useApp, useAppSave } from 'reducer'
+import { useMount, useUpdateEffect } from 'react-use'
+import { useApp, useAppRemove, useAppSave } from 'reducer'
 import { RouteComponentProps } from '@reach/router'
 
-import { Button, message, Modal, Table, Space } from 'antd'
+import { Button, message, Modal, Table, Space, Popconfirm } from 'antd'
 import { ContentHeader } from 'components'
 import Editor from './Editor'
 
@@ -13,6 +13,7 @@ import styles from './Home.module.scss'
 export default function Home(props: RouteComponentProps) {
   const [app, load] = useApp()
   const [saveData, save] = useAppSave()
+  const [removeData, remove] = useAppRemove()
 
   useMount(() => app.status !== 'loading' && app.status !== 'finished' && load())
   useUpdateEffect(() => {
@@ -50,7 +51,7 @@ export default function Home(props: RouteComponentProps) {
       >Create</Button>
     </ContentHeader>
     {
-      app.data?.apps && <List dataSource={app.data?.apps} onEdit={handleEdit} />
+      app.data?.apps && <List dataSource={app.data?.apps} onEdit={handleEdit} onRemove={remove} />
     }
     <Modal
       title="Edit"
@@ -70,10 +71,10 @@ export default function Home(props: RouteComponentProps) {
 interface ListProps {
   dataSource: Model.App[]
   onEdit?: (app: Model.App) => void
-  onDelete?: (app: Model.App) => void
+  onRemove?: (app: Model.App) => void
 }
 
-function List({ dataSource, onEdit, onDelete }: ListProps) {
+function List({ dataSource, onEdit, onRemove }: ListProps) {
 
   const columns = [
     {
@@ -106,9 +107,20 @@ function List({ dataSource, onEdit, onDelete }: ListProps) {
           <Button type="default" size="small" onClick={() => {
             onEdit && onEdit(record)
           }} >Edit</Button>
-          <Button type="default" size="small" danger onClick={() => {
-            onDelete && onDelete(record)
-          }} >Delete</Button>
+          
+          <Popconfirm
+            title="Are you sure delete this app?"
+            onConfirm={() => {
+              onRemove && onRemove(record)
+            }}
+            okText="Delete"
+            okButtonProps={{
+              danger: true
+            }}
+            cancelText="Cancel"
+          >
+            <Button type="default" size="small" danger >Delete</Button>
+          </Popconfirm>
         </Space>
       )
     },

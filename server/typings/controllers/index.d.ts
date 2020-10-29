@@ -51,5 +51,8 @@ declare namespace API {
 
     type SaveParams = Model.App
     type SaveData = Model.App
+
+    type RemoveParams = Model.App
+    type RemoveData = Model.App
   }
 }

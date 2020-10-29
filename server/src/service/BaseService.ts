@@ -23,6 +23,11 @@ export default class BaseService {
     return params
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async removeApp(_: Model.App): Promise<void> {
+    // Remove
+  }
+
   async findFeedbacks(): Promise<Model.Feedback[]> {
     return []
   }

@@ -36,6 +36,10 @@ export class Service extends BaseSerice {
     return this.instance.saveApp(params)
   }
 
+  async removeApp(params: Model.App): Promise<void> {
+    return this.instance.removeApp(params)
+  }
+
   async findFeedbacks(): Promise<Model.Feedback[]> {
     return this.instance.findFeedbacks()
   }

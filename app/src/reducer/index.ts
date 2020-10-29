@@ -49,8 +49,19 @@ appSave.handles.success.push((dispatch, data) => {
   }))
 })
 
+const appRemove = createGenericRepo('appRemove', service.app.remove)
+export const useAppRemove = appRemove.hook
+
+appRemove.handles.success.push((dispatch, data) => {
+  dispatch(app.slice.actions.reducer((state) => {
+    if (!state.data) return
+    state.data.apps = state.data.apps.filter(item => item.appId !== data.appId)
+  }))
+})
+
 
 export default {
   ...app.reducer,
-  ...appSave.reducer
+  ...appSave.reducer,
+  ...appRemove.reducer
 } as any

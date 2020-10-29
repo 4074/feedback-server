@@ -29,4 +29,17 @@ export default class AppController {
     const app = await Service.saveApp(params)
     return app
   }
+
+  @Post()
+  async remove(ctx: Koa.Context): Promise<API.AppController.RemoveData> {
+    const params: API.AppController.SaveParams = ctx.validate(
+      ctx.request.body,
+      {
+        name: 'string',
+        hosts: 'array'
+      }
+    )
+    await Service.removeApp(params)
+    return params
+  }
 }

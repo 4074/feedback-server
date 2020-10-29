@@ -46,6 +46,11 @@ export default class MongodbService extends BaseService {
     return result as Model.App
   }
 
+  async removeApp(params: Model.App): Promise<void> {
+    const app = await App.findOne({ appId: params.appId })
+    if (app) await app.remove()
+  }
+
   async findFeedbacks(): Promise<Model.Feedback[]> {
     const records: Model.Feedback[] = await Feedback.find().lean()
     return records
