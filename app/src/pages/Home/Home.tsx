@@ -13,7 +13,7 @@ import styles from './Home.module.scss'
 export default function Home(props: RouteComponentProps) {
   const [app, load] = useApp()
   const [saveData, save] = useAppSave()
-  const [removeData, remove] = useAppRemove()
+  const [, remove] = useAppRemove()
 
   useMount(() => app.status !== 'loading' && app.status !== 'finished' && load())
   useUpdateEffect(() => {
