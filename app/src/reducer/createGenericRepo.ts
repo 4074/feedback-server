@@ -10,11 +10,8 @@ export interface GenericState<T> {
   status: 'none' | 'loading' | 'finished' | 'error'
 }
 
-interface EffectHandleFunction {
-  (dispatch: Dispatch): any
-}
-export interface EffectHandles {
-  success: EffectHandleFunction[]
+export interface EffectHandles<S> {
+  success: ((dispatch: Dispatch, data: S) => any)[]
 }
 
 const createGenericSlice = <
@@ -80,7 +77,7 @@ export default function createGenericRepo<
     reducers
   })
 
-  const handles: EffectHandles = {
+  const handles: EffectHandles<T> = {
     success: []
   }
 
@@ -94,7 +91,7 @@ export default function createGenericRepo<
       try {
         const result = await effect(...params)
         for (const handle of handles.success) {
-          handle(dispacth)
+          handle(dispacth, result)
         }
         dispacth(actions.success(result))
       } catch (error) {

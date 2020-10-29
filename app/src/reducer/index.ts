@@ -37,6 +37,19 @@ export const useApp = app.hook
 const appSave = createGenericRepo('appSave', service.app.save)
 export const useAppSave = appSave.hook
 
+appSave.handles.success.push((dispatch, data) => {
+  dispatch(app.slice.actions.reducer((state) => {
+    if (!state.data) return
+    const index = state.data.apps.findIndex(item => item.appId === data.appId)
+    if (index >= 0) {
+      state.data.apps[index] = data
+    } else {
+      state.data.apps.push(data)
+    }
+  }))
+})
+
+
 export default {
   ...app.reducer,
   ...appSave.reducer

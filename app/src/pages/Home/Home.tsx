@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { useMount, useUpdateEffect } from 'react-use'
+import { useMount, useUpdateEffect, useUpdate } from 'react-use'
 import { useApp, useAppSave } from 'reducer'
 import { RouteComponentProps } from '@reach/router'
 
-import { Button, message, Modal } from 'antd'
+import { Button, message, Modal, Table, Space } from 'antd'
 import { ContentHeader } from 'components'
 import Editor from './Editor'
 
@@ -22,8 +22,22 @@ export default function Home(props: RouteComponentProps) {
   const [modalVisible, setModalVisible] = useState(false)
   const [appEditing, setAppEditing] = useState<Model.App>({name: '', actions: [], hosts: []})
 
+  useUpdateEffect(() => {
+    if (saveData.status === "finished") setModalVisible(false)
+  }, [saveData.status])
+
+  const handleCreate = () => {
+    setAppEditing({name: '', actions: [], hosts: []})
+    setModalVisible(true)
+  }
+
   const handleSave = () => {
     save(appEditing)
+  }
+
+  const handleEdit = (app: Model.App) => {
+    setAppEditing(app)
+    setModalVisible(true)
   }
 
   return <div className={`content-container ${styles.container}`}>
@@ -32,16 +46,11 @@ export default function Home(props: RouteComponentProps) {
         className={styles.createButton}
         type="primary"
         icon={<PlusOutlined />}
-        onClick={() => setModalVisible(true)}
+        onClick={handleCreate}
       >Create</Button>
     </ContentHeader>
     {
-      app.data?.apps &&
-      <div>
-        {
-          app.data.apps.map(item => <Item key={item.appId} dataSource={item} />)
-        }
-      </div>
+      app.data?.apps && <List dataSource={app.data?.apps} onEdit={handleEdit} />
     }
     <Modal
       title="Edit"
@@ -58,13 +67,55 @@ export default function Home(props: RouteComponentProps) {
   </div>
 }
 
-interface ItemProps {
-  dataSource: Model.App
+interface ListProps {
+  dataSource: Model.App[]
+  onEdit?: (app: Model.App) => void
+  onDelete?: (app: Model.App) => void
 }
 
-function Item({ dataSource }: ItemProps) {
+function List({ dataSource, onEdit, onDelete }: ListProps) {
+
+  const columns = [
+    {
+      title: 'App Id',
+      dataIndex: 'appId',
+      key: 'appId',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Hosts',
+      dataIndex: 'hosts',
+      key: 'hosts',
+      render: (hosts: string[]) => hosts.join(', ')
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'actions',
+      key: 'actions',
+      render: (actions?: Model.AppAction[]) => actions && actions.map(a => a.type).join(', ')
+    },
+    {
+      title: '',
+      key: 'action',
+      render: (text: string, record: any) => (
+        <Space size="small">
+          <Button type="default" size="small" onClick={() => {
+            onEdit && onEdit(record)
+          }} >Edit</Button>
+          <Button type="default" size="small" danger onClick={() => {
+            onDelete && onDelete(record)
+          }} >Delete</Button>
+        </Space>
+      )
+    },
+  ]
+
   return <div>
-    <div>{dataSource.name}</div>
+    <Table dataSource={dataSource} columns={columns} pagination={{hideOnSinglePage: true}} />
   </div>
 }
 

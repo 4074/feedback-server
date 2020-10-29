@@ -36,6 +36,9 @@ export default class MongodbService extends BaseService {
       app.timestamp = app.createAt.getTime()
     } else {
       app = await App.findOne({ appId: params.appId })
+      app.name = params.name
+      app.hosts = params.hosts
+      app.actions = params.actions
     }
 
     const result = (await app.save()).toObject()
