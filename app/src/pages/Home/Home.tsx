@@ -127,7 +127,7 @@ function List({ dataSource, onEdit, onRemove }: ListProps) {
   ]
 
   return <div>
-    <Table dataSource={dataSource} columns={columns} pagination={{hideOnSinglePage: true}} />
+    <Table dataSource={dataSource} rowKey="appId" columns={columns} pagination={{hideOnSinglePage: true}} />
   </div>
 }
 
