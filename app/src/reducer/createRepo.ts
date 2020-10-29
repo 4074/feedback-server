@@ -71,6 +71,14 @@ const createGenericSlice = <
   })
 }
 
+export function combineToReducer(...args: {name: string, slice: any}[]): Reducer {
+  const combined: any = {}
+  for (const { name, slice } of args) {
+    combined[name] = slice.reducer
+  }
+  return combined as Reducer
+}
+
 export default function createGenericRepo<
   E extends (...args: any) => Promise<any>,
   P = Parameters<E>,
@@ -116,6 +124,7 @@ export default function createGenericRepo<
   }
 
   return {
+    name,
     slice,
     reducer: {
       [name]: slice.reducer
