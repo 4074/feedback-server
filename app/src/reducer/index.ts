@@ -38,7 +38,7 @@ const appSave = createGenericRepo('appSave', service.app.save)
 export const useAppSave = appSave.hook
 
 appSave.handles.success.push((dispatch, data) => {
-  dispatch(app.slice.actions.reducer((state) => {
+  dispatch(app.slice.actions.intercept((state) => {
     if (!state.data) return
     const index = state.data.apps.findIndex(item => item.appId === data.appId)
     if (index >= 0) {
@@ -53,7 +53,7 @@ const appRemove = createGenericRepo('appRemove', service.app.remove)
 export const useAppRemove = appRemove.hook
 
 appRemove.handles.success.push((dispatch, data) => {
-  dispatch(app.slice.actions.reducer((state) => {
+  dispatch(app.slice.actions.intercept((state) => {
     if (!state.data) return
     state.data.apps = state.data.apps.filter(item => item.appId !== data.appId)
   }))

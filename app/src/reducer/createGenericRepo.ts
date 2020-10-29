@@ -4,7 +4,8 @@ import { createSlice, combineReducers, PayloadAction, SliceCaseReducers, Validat
 import { Reducer, CombinedState, Dispatch } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 
-export interface GenericState<T> {
+export interface GenericState<P, T> {
+  params?: P
   data?: T
   error?: Error,
   status: 'none' | 'loading' | 'finished' | 'error'
@@ -15,22 +16,24 @@ export interface EffectHandles<S> {
 }
 
 const createGenericSlice = <
+  P,
   T,
-  Reducers extends SliceCaseReducers<GenericState<T>>
+  Reducers extends SliceCaseReducers<GenericState<P, T>>
 >({
     name = '',
     initialState,
     reducers
   }: {
   name: string
-  initialState: GenericState<T>
-  reducers: ValidateSliceCaseReducers<GenericState<T>, Reducers>
+  initialState: GenericState<P, T>
+  reducers: ValidateSliceCaseReducers<GenericState<P, T>, Reducers>
 }) => {
   return createSlice({
     name,
     initialState,
     reducers: {
-      start(state) {
+      start(state: GenericState<P, T>, action: PayloadAction<P>) {
+        state.params = action.payload
         state.status = 'loading'
       },
       /**
@@ -40,18 +43,27 @@ const createGenericSlice = <
        * which can sometimes be problematic with yet-unresolved generics.
        * This is a general problem when working with immer's Draft type and generics.
        */
-      success(state: GenericState<T>, action: PayloadAction<T>) {
+      success(state: GenericState<P, T>, action: PayloadAction<T>) {
         state.data = action.payload
         state.status = 'finished'
       },
 
-      fail(state: GenericState<T>, action: PayloadAction<Error>) {
+      fail(state: GenericState<P, T>, action: PayloadAction<Error>) {
         state.error = action.payload
         state.status = 'finished'
       },
 
-      reducer(state: GenericState<T>, action: PayloadAction<(state: GenericState<T>) => void>) {
-        action.payload(state)
+      intercept: {
+        reducer(state: GenericState<P, T>, action: PayloadAction<{interceptor: (state: GenericState<P, T>) => void}>) {
+          action.payload.interceptor(state)
+        },
+        // Wrap payload with a interceptor key.
+        // Due to set `ignoredActionPaths: ['payload.interceptor']`.
+        prepare(interceptor: (state: GenericState<P, T>) => void) {
+          return {
+            payload: {interceptor}
+          }
+        }
       },
 
       ...reducers
@@ -61,15 +73,16 @@ const createGenericSlice = <
 
 export default function createGenericRepo<
   E extends (...args: any) => Promise<any>,
+  P = Parameters<E>,
   T = E extends (...args: any) => Promise<infer R> ? R : never,
   H = E extends (...args: infer R) => Promise<T> ? (...args: R) => Promise<void> : never
 >(
   name: string,
   effect: E,
-  reducers: ValidateSliceCaseReducers<GenericState<T>, SliceCaseReducers<GenericState<T>>> = {}
+  reducers: ValidateSliceCaseReducers<GenericState<P, T>, SliceCaseReducers<GenericState<P, T>>> = {}
 ) {
 
-  const initialState = { status: 'none' } as GenericState<T>
+  const initialState = { status: 'none' } as GenericState<P, T>
 
   const slice = createGenericSlice({
     name,
@@ -81,13 +94,13 @@ export default function createGenericRepo<
     success: []
   }
 
-  function hook(): [GenericState<T>, H] {
-    const data = useSelector<any, GenericState<T>>(state => state[name])
+  function hook(): [GenericState<P, T>, H] {
+    const data = useSelector<any, GenericState<P, T>>(state => state[name])
     const dispacth = useDispatch()
     const actions = slice.actions
 
-    const load = (async (...params: any[]) => {
-      dispacth(actions.start())
+    const load = (async (...params: any) => {
+      dispacth(actions.start(params))
       try {
         const result = await effect(...params)
         for (const handle of handles.success) {
@@ -115,8 +128,9 @@ export default function createGenericRepo<
 type EffectHook<
   E extends (...args: any) => Promise<any>,
   T = E extends (...args: any) => Promise<infer R> ? R : never,
-  H = E extends (...args: infer R) => Promise<T> ? (...args: R) => Promise<void> : never
-> = () => [GenericState<T>, H]
+  H = E extends (...args: infer R) => Promise<T> ? (...args: R) => Promise<void> : never,
+  P = Parameters<E>
+> = () => [GenericState<P, T>, H]
 
 export function createRepos<
   L extends {[key: string]: E},
