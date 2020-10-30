@@ -12,10 +12,10 @@ export default {
   isPm2,
   isProduction,
 
-  database: 'mongodb',
-  mongodb: env.MONGODB || 'mongodb://localhost:27017',
+  database: env.DATABASE || 'mongodb',
+  mongodb: env.MONGODB || 'mongodb://localhost:27017/feedback',
 
-  storage: 'aws',
+  storage: env.STORAGE || 'aws',
   aws: {
     key: env.AWS_KEY,
     secret: env.AWS_SECRET,
