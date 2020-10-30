@@ -5,15 +5,11 @@ import Service from '@server/service'
 import Storage from '@server/storage'
 import runner from '@server/runner'
 
-export async function list(): Promise<Model.Feedback[]> {
-  return []
-}
-
 @Controller()
-export default class FeecbackController {
+export default class FeedbackController {
   @Get()
   async list(): Promise<Model.Feedback[]> {
-    return []
+    return Service.findFeedbacks()
   }
 
   @Get()
