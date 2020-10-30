@@ -1,9 +1,9 @@
 import Header from './Header/Header'
 import Home from './Home/Home'
-import Fx from './Fx/Fx'
+import Feedback from './Feedback/Feedback'
 
 export {
   Header,
   Home,
-  Fx
+  Feedback
 }
