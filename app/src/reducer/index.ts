@@ -4,7 +4,7 @@ import createRepo, { combineToReducer } from './createRepo'
 const app = createRepo('app', service.app.list)
 export const useApp = app.hook
 
-const appSave = createRepo('appSave', service.app.save)
+const appSave = createRepo('app/save', service.app.save)
 appSave.handles.success.push((dispatch, data) => {
   dispatch(app.slice.actions.intercept((state) => {
     if (!state.data) return
@@ -18,7 +18,7 @@ appSave.handles.success.push((dispatch, data) => {
 })
 export const useAppSave = appSave.hook
 
-const appRemove = createRepo('appRemove', service.app.remove)
+const appRemove = createRepo('app/remove', service.app.remove)
 appRemove.handles.success.push((dispatch, data) => {
   dispatch(app.slice.actions.intercept((state) => {
     if (!state.data) return
@@ -27,4 +27,7 @@ appRemove.handles.success.push((dispatch, data) => {
 })
 export const useAppRemove = appRemove.hook
 
-export default combineToReducer(app, appSave, appRemove)
+const feedback = createRepo('feedback', service.feedback.list)
+export const useFeedback = feedback.hook
+
+export default combineToReducer(app, appSave, appRemove, feedback)

@@ -35,7 +35,7 @@ app.use(ReturnMiddleware())
 
 app.use(async (ctx: Koa.Context, next: () => any) => {
   if (ctx.method === 'POST' && ctx.path === '/receive') {
-    return koaCompose([cors, receive])(ctx, next)
+    return koaCompose([cors(), receive])(ctx, next)
   }
   return next()
 })

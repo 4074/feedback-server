@@ -26,9 +26,9 @@ export default class FeecbackController {
 export async function receive(ctx: Koa.Context): Promise<boolean> {
   const params: Model.Feedback = ctx.validate(ctx.request.body, {
     appId: 'string',
-    user: 'string',
+    user: { type: 'string', optional: true },
     action: 'string',
-    data: 'string',
+    data: { type: 'string', optional: true },
     message: { type: 'string', optional: true }
   })
 
@@ -36,7 +36,7 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
   if (!app) ctx.throw(400, 'Expected a valid appId:', params.appId)
 
   if (app.hosts && app.hosts.length) {
-    const matches = (ctx.request.path || '').match(/https?:\/\/(.+)\//)
+    const matches = (ctx.header.referer || '').match(/https?:\/\/(.+)\//)
     if (!matches || matches.length < 2) {
       ctx.throw(400, 'Expected request from a valid host')
     }
