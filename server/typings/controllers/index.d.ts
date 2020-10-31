@@ -32,8 +32,8 @@ declare namespace Model {
     user: string
     action: 'open' | 'feedback'
     data: Record<string, any>
-    message?: string
-    images?: string[]
+    message: string
+    images: string[]
     timestamp: number
     createAt: Date
   }
@@ -54,5 +54,15 @@ declare namespace API {
 
     type RemoveParams = Model.App
     type RemoveData = Model.App
+  }
+
+  namespace FeedbackController {
+    interface ReceiveParams
+      extends Pick<
+        Model.Feedback,
+        'appId' | 'user' | 'action' | 'message' | 'timestamp'
+      > {
+      data: string
+    }
   }
 }

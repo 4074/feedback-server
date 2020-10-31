@@ -20,16 +20,33 @@ export default class FeedbackController {
 }
 
 export async function receive(ctx: Koa.Context): Promise<boolean> {
-  const params: Model.Feedback = ctx.validate(ctx.request.body, {
-    appId: 'string',
-    user: { type: 'string', optional: true },
-    action: 'string',
-    data: { type: 'string', optional: true },
-    message: { type: 'string', optional: true }
-  })
+  const params: API.FeedbackController.ReceiveParams = ctx.validate(
+    ctx.request.body,
+    {
+      appId: 'string',
+      user: 'string',
+      action: 'string',
+      data: 'string',
+      message: 'string'
+    }
+  )
 
-  const app = await Service.findAppById(params.appId)
-  if (!app) ctx.throw(400, 'Expected a valid appId:', params.appId)
+  const source: Model.Feedback = {
+    ...params,
+    path: ctx.header.referer,
+    userAgent: ctx.header['user-agent'],
+    images: [],
+    data: {},
+    createAt: new Date()
+  }
+  try {
+    source.data = JSON.parse(params.data)
+  } catch (_) {
+    //
+  }
+
+  const app = await Service.findAppById(source.appId)
+  if (!app) ctx.throw(400, 'Expected a valid appId:', source.appId)
 
   if (app.hosts && app.hosts.length) {
     const matches = (ctx.header.referer || '').match(/https?:\/\/(.+)\//)
@@ -49,24 +66,16 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
     if (!has) ctx.throw(400, 'Expected request from a valid host')
   }
 
-  params.path = ctx.header.referer || params.path
-  params.userAgent = ctx.header['user-agent']
-  try {
-    params.data = JSON.parse(params.data as any)
-  } catch (_) {
-    //
-  }
-
-  if (params.action === 'feedback') {
+  if (source.action === 'feedback') {
     if (ctx.request.files) {
       const files = Object.values(ctx.request.files)
       const images = await Storage.upload(files)
-      params.images = images
+      source.images = images
     }
-    await Service.saveFeedback(params)
-    runner(app, params)
+    await Service.saveFeedback(source)
+    runner(app, source)
   } else {
-    await Service.saveFeedback(params)
+    await Service.saveFeedback(source)
   }
 
   return true
