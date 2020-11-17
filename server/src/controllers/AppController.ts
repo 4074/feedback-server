@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import Koa from 'koa'
 import { Controller, Get, Post } from 'koa-autoboot'
 import Service from '@server/service'
@@ -6,19 +5,19 @@ import Service from '@server/service'
 @Controller()
 export default class AppController {
   @Get()
-  async meta(): Promise<API.AppController.MetaData> {
+  public async meta(): Promise<API.AppController.MetaData> {
     const actionTypes: Model.AppActionType[] = ['popo', 'udata-question']
     return { actionTypes }
   }
 
   @Get()
-  async list(): Promise<API.AppController.ListData> {
+  public async list(): Promise<API.AppController.ListData> {
     const apps = await Service.findApps()
     return { apps }
   }
 
   @Post()
-  async save(ctx: Koa.Context): Promise<API.AppController.SaveData> {
+  public async save(ctx: Koa.Context): Promise<API.AppController.SaveData> {
     const params: API.AppController.SaveParams = ctx.validate(
       ctx.request.body,
       {
@@ -31,7 +30,7 @@ export default class AppController {
   }
 
   @Post()
-  async remove(ctx: Koa.Context): Promise<API.AppController.RemoveData> {
+  public async remove(ctx: Koa.Context): Promise<API.AppController.RemoveData> {
     const params: API.AppController.SaveParams = ctx.validate(
       ctx.request.body,
       {

@@ -6,7 +6,7 @@ import App from './App'
 import Feedback from './Feedback'
 
 export default class MongodbService extends BaseService {
-  async setup(): Promise<void> {
+  public async setup(): Promise<void> {
     await super.setup()
     await mongoose.connect(config.mongodb, {
       useNewUrlParser: true,
@@ -16,17 +16,17 @@ export default class MongodbService extends BaseService {
     console.log('mongodb connected')
   }
 
-  async findApps(): Promise<Model.App[]> {
+  public async findApps(): Promise<Model.App[]> {
     const records: Model.App[] = await App.find().lean()
     return records
   }
 
-  async findAppById(appId: string): Promise<Model.App | null> {
+  public async findAppById(appId: string): Promise<Model.App | null> {
     const record = await App.findOne({ appId })
     if (record) return record.toObject()
   }
 
-  async saveApp(params: Model.App): Promise<Model.App> {
+  public async saveApp(params: Model.App): Promise<Model.App> {
     let app: any
 
     if (!params.appId) {
@@ -46,17 +46,17 @@ export default class MongodbService extends BaseService {
     return result as Model.App
   }
 
-  async removeApp(params: Model.App): Promise<void> {
+  public async removeApp(params: Model.App): Promise<void> {
     const app = await App.findOne({ appId: params.appId })
     if (app) await app.remove()
   }
 
-  async findFeedbacks(): Promise<Model.Feedback[]> {
+  public async findFeedbacks(): Promise<Model.Feedback[]> {
     const records: Model.Feedback[] = await Feedback.find().lean()
     return records
   }
 
-  async saveFeedback(params: Model.Feedback): Promise<Model.Feedback> {
+  public async saveFeedback(params: Model.Feedback): Promise<Model.Feedback> {
     const feedback = new Feedback(params)
     const result = (await feedback.save()).toObject()
     return result as Model.Feedback

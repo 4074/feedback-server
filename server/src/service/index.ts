@@ -4,9 +4,9 @@ import MongodbService from './mongodb'
 import LowdbService from './lowdb'
 
 export class Service extends BaseSerice {
-  instance: BaseSerice
+  public instance: BaseSerice
 
-  constructor(database: string) {
+  public constructor(database: string) {
     super()
     switch (database) {
       case 'mongodb': {
@@ -24,27 +24,27 @@ export class Service extends BaseSerice {
     this.instance.setup()
   }
 
-  async findApps(): Promise<Model.App[]> {
+  public async findApps(): Promise<Model.App[]> {
     return this.instance.findApps()
   }
 
-  async findAppById(appId: string): Promise<Model.App | null> {
+  public async findAppById(appId: string): Promise<Model.App | null> {
     return this.instance.findAppById(appId)
   }
 
-  async saveApp(params: Model.App): Promise<Model.App> {
+  public async saveApp(params: Model.App): Promise<Model.App> {
     return this.instance.saveApp(params)
   }
 
-  async removeApp(params: Model.App): Promise<void> {
+  public async removeApp(params: Model.App): Promise<void> {
     return this.instance.removeApp(params)
   }
 
-  async findFeedbacks(): Promise<Model.Feedback[]> {
+  public async findFeedbacks(): Promise<Model.Feedback[]> {
     return this.instance.findFeedbacks()
   }
 
-  async saveFeedback(params: Model.Feedback): Promise<Model.Feedback> {
+  public async saveFeedback(params: Model.Feedback): Promise<Model.Feedback> {
     return this.instance.saveFeedback(params)
   }
 }

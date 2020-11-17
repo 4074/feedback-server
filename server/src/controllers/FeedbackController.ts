@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import Koa from 'koa'
 import { Controller, Get } from 'koa-autoboot'
 import Service from '@server/service'
@@ -8,12 +7,12 @@ import runner from '@server/runner'
 @Controller()
 export default class FeedbackController {
   @Get()
-  async list(): Promise<Model.Feedback[]> {
+  public async list(): Promise<Model.Feedback[]> {
     return Service.findFeedbacks()
   }
 
   @Get()
-  async error(): Promise<void> {
+  public async error(): Promise<void> {
     let b: number[]
     b.push(1)
   }
