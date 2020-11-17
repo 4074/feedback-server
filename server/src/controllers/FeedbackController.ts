@@ -1,4 +1,4 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import Koa from 'koa'
 import { Controller, Get } from 'koa-autoboot'
 import Service from '@server/service'
@@ -48,7 +48,7 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
   const app = await Service.findAppById(source.appId)
   if (!app) ctx.throw(400, 'Expected a valid appId:', source.appId)
 
-  if (app.hosts && app.hosts.length) {
+  if (app.hosts?.length) {
     const matches = (ctx.header.referer || '').match(/https?:\/\/(.+)\//)
     if (!matches || matches.length < 2) {
       ctx.throw(400, 'Expected request from a valid host')

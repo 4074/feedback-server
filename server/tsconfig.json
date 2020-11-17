@@ -1,23 +1,19 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es2017",
-        "noImplicitAny": false,
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "sourceMap": true,
-        "outDir": "build",
-        "baseUrl": "./src",
-        "typeRoots": ["node_modules/@types", "typings"],
-        "paths": {
-            "@server/*": [
-                "*"
-            ]
-        },
-        "esModuleInterop": true,
-        "experimentalDecorators": true
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "outDir": "build",
+    "baseUrl": "./src",
+    "typeRoots": ["node_modules/@types", "typings"],
+    "paths": {
+      "@server/*": ["*"]
     },
-    "include": [
-        "src/**/*"
-    ]
+    "esModuleInterop": true,
+    "experimentalDecorators": true
+  },
+  "include": ["src/**/*"]
 }

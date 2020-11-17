@@ -1,4 +1,4 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import Koa from 'koa'
 import { Controller, Get, Post } from 'koa-autoboot'
 import Service from '@server/service'
