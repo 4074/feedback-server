@@ -1,6 +1,7 @@
 import config from '@server/config'
 import BaseStorage from './BaseStorage'
 import AwsStorage from './AwsStorage'
+import FileStorage from './FileStorage'
 
 export interface UploadFile {
   path: string
@@ -18,7 +19,7 @@ export class Storage extends BaseStorage {
         break
       }
       default:
-        this.instance = new BaseStorage()
+        this.instance = new FileStorage()
     }
   }
 

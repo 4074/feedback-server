@@ -25,10 +25,14 @@ app.use(
   })
 )
 
-// Resolve static file
+// Resolve upload static file
+app.use(koaStatic(path.join(config.root, '../upload')))
+
+// Resolve app static file
+const appBuildPath = path.join(config.root, '../../app/build/')
 app.use(async (ctx, next) => {
   if (ctx.path !== '/') {
-    await koaStatic(path.resolve(__dirname, '../../app/build/'), {
+    await koaStatic(appBuildPath, {
       maxage: 31536000000
     })(ctx, next)
   } else {
@@ -41,13 +45,14 @@ let indexBuffer: Buffer
 app.use(async (ctx, next) => {
   if (ctx.path.indexOf('/api') !== 0 && ctx.path.indexOf('.') < 0) {
     if (!indexBuffer) {
-      const indexPath = path.resolve(__dirname, '../../app/build/index.html')
+      const indexPath = path.join(appBuildPath, 'index.html')
+      if (!fs.existsSync(indexPath)) return next
       indexBuffer = fs.readFileSync(indexPath)
     }
     ctx.type = 'html'
     ctx.body = indexBuffer
   } else {
-    await next()
+    return next()
   }
 })
 

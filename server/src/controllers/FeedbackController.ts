@@ -70,7 +70,7 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
   if (source.action === 'feedback') {
     if (ctx.request.files) {
       const files = Object.values(ctx.request.files) as any
-      const images = await Storage.upload(files[0])
+      const images = await Storage.upload(Array.isArray(files[0]) ? files[0] : files)
       source.images = images
     }
     await Service.saveFeedback(source)
