@@ -8,9 +8,9 @@ export interface UploadFile {
 }
 
 export class Storage extends BaseStorage {
-  instance: BaseStorage
+  public instance: BaseStorage
 
-  constructor(type: string) {
+  public constructor(type: string) {
     super()
     switch (type) {
       case 'aws': {
@@ -22,7 +22,7 @@ export class Storage extends BaseStorage {
     }
   }
 
-  async upload(files: UploadFile[]): Promise<string[]> {
+  public async upload(files: UploadFile[]): Promise<string[]> {
     return this.instance.upload(files)
   }
 }

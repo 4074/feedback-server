@@ -3,7 +3,7 @@
 import { UploadFile } from '.'
 
 export default class BaseStorage {
-  async upload(files: UploadFile[]): Promise<string[]> {
+  public async upload(files: UploadFile[]): Promise<string[]> {
     const promises = []
     for (const file of files) {
       promises.push(this.uploadOne(file))
@@ -11,7 +11,7 @@ export default class BaseStorage {
     return Promise.all(promises)
   }
 
-  async uploadOne(file: UploadFile): Promise<string> {
+  public async uploadOne(file: UploadFile): Promise<string> {
     return ''
   }
 }

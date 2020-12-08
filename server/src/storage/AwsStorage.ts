@@ -8,9 +8,9 @@ import BaseStorage from './BaseStorage'
 import { UploadFile } from '.'
 
 export default class AwsStorage extends BaseStorage {
-  client: AWS.S3
+  public client: AWS.S3
 
-  constructor() {
+  public constructor() {
     super()
     this.client = new AWS.S3({
       apiVersion: 'latest',
@@ -20,7 +20,7 @@ export default class AwsStorage extends BaseStorage {
     })
   }
 
-  async uploadOne(file: UploadFile): Promise<string> {
+  public async uploadOne(file: UploadFile): Promise<string> {
     return new Promise((resolve, reject) => {
       fs.readFile(file.path, (err, data) => {
         if (err) return reject(err)

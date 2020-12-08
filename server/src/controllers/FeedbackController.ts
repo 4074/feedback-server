@@ -7,8 +7,10 @@ import runner from '@server/runner'
 @Controller()
 export default class FeedbackController {
   @Get()
-  public async list(): Promise<Model.Feedback[]> {
-    return Service.findFeedbacks()
+  public async list(): Promise<API.FeedbackController.ListData> {
+    const feedbacks = await Service.findFeedbacks()
+    feedbacks.sort((a, b) => b.timestamp - a.timestamp)
+    return feedbacks
   }
 
   @Get()
@@ -67,8 +69,8 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
 
   if (source.action === 'feedback') {
     if (ctx.request.files) {
-      const files = Object.values(ctx.request.files)
-      const images = await Storage.upload(files)
+      const files = Object.values(ctx.request.files) as any
+      const images = await Storage.upload(files[0])
       source.images = images
     }
     await Service.saveFeedback(source)

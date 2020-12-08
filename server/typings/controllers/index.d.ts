@@ -57,6 +57,8 @@ declare namespace API {
   }
 
   namespace FeedbackController {
+    
+    type ListData = Model.Feedback[]
     interface ReceiveParams
       extends Pick<
         Model.Feedback,
