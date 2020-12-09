@@ -4,7 +4,7 @@ import { RouteComponentProps } from '@reach/router'
 import { useMount, useUpdateEffect } from 'react-use'
 import { useFeedback, useApp } from 'reducer'
 
-import { Table, Image } from 'antd'
+import { Table, Image, Form } from 'antd'
 import { ContentHeader } from 'components'
 import styles from './Feedback.module.scss'
 
@@ -12,7 +12,7 @@ type FeedbackItem = Model.Feedback & { app: Model.App}
 
 const columns = [
   {
-    title: 'AppName',
+    title: 'App Name',
     dataIndex: ['app', 'name'],
     key: 'appName',
   },
@@ -87,6 +87,16 @@ export default function Feedback(props: RouteComponentProps) {
       className={styles.table}
       columns={columns}
       dataSource={dataSource}
+      expandable={{
+        expandRowByClick: true,
+        expandedRowRender: record => <Form className={styles.detail} labelCol={{ span: 2 }}>
+          <Form.Item label="Path">{record.path}</Form.Item>
+          <Form.Item label="Message">{record.message}</Form.Item>
+          <Form.Item label="User">{record.user}</Form.Item>
+          <Form.Item label="User Agent">{record.userAgent}</Form.Item>
+          <Form.Item label="Data">{record.data && JSON.stringify(record.data)}</Form.Item>
+        </Form>
+      }}
     />
   </div>
 }

@@ -17,11 +17,19 @@
     :global(.ant-image) {
       margin-right: 2px;
     }
-    
+
     img {
       width: auto;
       height: 28px;
       border-radius: 4px;
+    }
+  }
+
+  .detail {
+    :global {
+      .ant-form-item {
+        margin-bottom: 4px;
+      }
     }
   }
 }
