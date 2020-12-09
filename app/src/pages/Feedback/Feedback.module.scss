@@ -4,33 +4,24 @@
   min-height: 400px;
   background: #fff;
 
-  .item {
-    display: flex;
-    border-top: solid 1px #e8e8e8;
-
-    >div {
-      flex: 1;
+  .table {
+    td {
+      line-height: 28px;
       padding: 8px 12px;
     }
+  }
 
-    &.thead {
-      border: none;
-      background-color: #f6f6f6;
-      color: #787878;
+  .images {
+    height: 28px;
 
-      >div {
-        padding: 4px 12px;
-      }
+    :global(.ant-image) {
+      margin-right: 2px;
     }
-
-    .images {
-      padding: 4px 12px;
-      height: 32px;
-
-      img {
-        height: 100%;
-        border-radius: 4px;
-      }
+    
+    img {
+      width: auto;
+      height: 28px;
+      border-radius: 4px;
     }
   }
 }

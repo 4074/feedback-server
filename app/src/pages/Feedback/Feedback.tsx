@@ -4,6 +4,7 @@ import { RouteComponentProps } from '@reach/router'
 import { useMount } from 'react-use'
 import { useFeedback } from 'reducer'
 
+import { Table, Image } from 'antd'
 import { ContentHeader } from 'components'
 import styles from './Feedback.module.scss'
 
@@ -14,40 +15,45 @@ export default function Feedback(props: RouteComponentProps) {
     if (feedback.status === 'none' || feedback.status === 'error') loadFeedback()
   })
 
+  const columns = [
+    {
+      title: 'AppID',
+      dataIndex: 'appId',
+      key: 'appId',
+    },
+    {
+      title: 'Path',
+      dataIndex: 'path',
+      key: 'path',
+    },
+    {
+      title: 'Message',
+      dataIndex: 'message',
+      key: 'message',
+    },{
+      title: 'Images',
+      dataIndex: 'images',
+      key: 'images',
+      render: (_: string, record: Model.Feedback) => {
+        // TODO: Remove any
+        const ImageGroup: any = Image.PreviewGroup
+        return <div className={styles.images}>
+          <ImageGroup>
+            {
+              record.images.map(src => <Image key={src} src={src} />)
+            }
+          </ImageGroup>
+        </div>
+      }
+    },{
+      title: 'Date',
+      dataIndex: 'timestamp',
+      key: 'timestamp',
+    },
+  ]
+
   return <div className={`content-container ${styles.container}`}>
     <ContentHeader title="Feedbacks" />
-    <div className={`${styles.item} ${styles.thead}`}>
-      <div className={styles.appId}>AppID</div>
-      <div className={styles.path}>Path</div>
-      <div className={styles.message}>Message</div>
-      <div className={styles.images}>Images</div>
-      <div className={styles.date}>Date</div>
-    </div>
-    {
-      feedback.status === 'finished' && feedback.data && feedback.data.map(item =>
-        <Item key={item.timestamp} dataSource={item} />
-      )
-    }
+    <Table className={styles.table} dataSource={feedback.data} columns={columns} />
   </div>
-}
-
-
-function Item({ dataSource }: { dataSource: Model.Feedback }) {
-  return <div className={styles.item}>
-    <div className={styles.appId}>{dataSource.appId}</div>
-    <div className={styles.path}>{dataSource.path}</div>
-    <div className={styles.message}>{dataSource.message}</div>
-    <div className={styles.images}>
-      {
-        dataSource.images.map(image => 
-          <Image key={image} src={image} />
-        )
-      }
-    </div>
-    <div className={styles.date}>{dataSource.timestamp}</div>
-  </div>
-}
-
-function Image({src, alt}: {src: string, alt?: string}) {
-  return <img src={src} alt={alt} />
 }
