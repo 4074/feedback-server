@@ -26,7 +26,6 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
     {
       appId: 'string',
       user: 'string',
-      action: 'string',
       data: 'string',
       message: 'string'
     }
@@ -67,17 +66,13 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
     if (!has) ctx.throw(400, 'Expected request from a valid host')
   }
 
-  if (source.action === 'feedback') {
-    if (ctx.request.files) {
-      const files = Object.values(ctx.request.files) as any
-      const images = await Storage.upload(Array.isArray(files[0]) ? files[0] : files)
-      source.images = images
-    }
-    await Service.saveFeedback(source)
-    runner(app, source)
-  } else {
-    await Service.saveFeedback(source)
+  if (ctx.request.files) {
+    const files = Object.values(ctx.request.files) as any
+    const images = await Storage.upload(Array.isArray(files[0]) ? files[0] : files)
+    source.images = images
   }
+  await Service.saveFeedback(source)
+  runner(app, source)
 
   return true
 }

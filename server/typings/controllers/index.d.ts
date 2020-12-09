@@ -30,7 +30,6 @@ declare namespace Model {
     path: string
     userAgent: string
     user: string
-    action: 'open' | 'feedback'
     data: Record<string, any>
     message: string
     images: string[]
@@ -62,7 +61,7 @@ declare namespace API {
     interface ReceiveParams
       extends Pick<
         Model.Feedback,
-        'appId' | 'user' | 'action' | 'message' | 'timestamp'
+        'appId' | 'user' | 'message' | 'timestamp'
       > {
       data: string
     }
