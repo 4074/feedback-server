@@ -37,6 +37,7 @@ export async function receive(ctx: Koa.Context): Promise<boolean> {
     userAgent: ctx.header['user-agent'],
     images: [],
     data: {},
+    closed: false,
     createAt: new Date()
   }
   try {

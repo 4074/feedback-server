@@ -34,6 +34,7 @@ declare namespace Model {
     message: string
     images: string[]
     timestamp: number
+    closed: boolean
     createAt: Date
   }
 }
