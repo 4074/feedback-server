@@ -11,6 +11,22 @@
     }
   }
 
+  .path {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+    max-width: 200px;
+  }
+
+  .message {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+    max-width: 240px;
+  }
+
   .images {
     height: 28px;
 

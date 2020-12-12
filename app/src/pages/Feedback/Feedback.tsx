@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { RouteComponentProps } from '@reach/router'
+import dayjs from 'dayjs'
 
 import { useMount, useUpdateEffect } from 'react-use'
 import { useFeedback, useApp } from 'reducer'
@@ -20,11 +21,13 @@ const columns = [
     title: 'Path',
     dataIndex: 'path',
     key: 'path',
+    render: (text: string) => <div className={styles.path}>{text}</div>
   },
   {
     title: 'Message',
     dataIndex: 'message',
     key: 'message',
+    render: (text: string) => <div className={styles.message}>{text}</div>
   },{
     title: 'Images',
     dataIndex: 'images',
@@ -44,6 +47,7 @@ const columns = [
     title: 'Date',
     dataIndex: 'timestamp',
     key: 'timestamp',
+    render: (text: string) => <div>{dayjs(text).format('YYYY/MM/DD HH:mm')}</div>
   },
 ]
 
