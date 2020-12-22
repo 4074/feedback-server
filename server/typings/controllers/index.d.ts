@@ -3,8 +3,15 @@ declare namespace Model {
     name: string
     appId?: string
     hosts: string[]
-    actions?: AppAction[]
+    actions: AppAction[]
+    setup: AppSetup
     timestamp?: number
+  }
+
+  interface AppSetup {
+    auto: boolean,
+    include: string[],
+    option: Record<string, any>
   }
 
   type AppActionType = 'popo' | 'udata-question'

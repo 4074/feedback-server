@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Input, message } from 'antd'
+import { Input, message, Switch } from 'antd'
 import styles from './Editor.module.scss'
 
 interface FormGroupProps {
@@ -28,13 +28,11 @@ export interface EditorProps {
 
 export default function Editor({ dataSource, onChange }: EditorProps) {
   const [actionsStr, setActionStr] = useState(JSON.stringify(dataSource.actions || [], null, 2))
-
-  function handleActionsChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+  const handleActionsChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = event.target
     setActionStr(value)
   }
-
-  function handleActionsBlur() {
+  const handleActionsBlur = () => {
     try {
       const actions = JSON.parse(actionsStr)
       onChange && onChange({
@@ -47,8 +45,12 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
     }
   }
 
+  const handleSetupModeChange = () => {
+
+  }
+
   return <div className={styles.container}>
-    <FormGroup label="name" required>
+    <FormGroup label="Name" required>
       <Input value={dataSource.name} placeholder="Input please" onChange={(event) => {
         onChange && onChange({
           ...dataSource,
@@ -56,7 +58,7 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
         })
       }} />
     </FormGroup>
-    <FormGroup label="hosts" required>
+    <FormGroup label="Hosts" required>
       <Input.TextArea
         placeholder="Input please, e.g: www.163.com"
         value={dataSource.hosts.join('\n')}
@@ -68,14 +70,46 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
         }}
       />
     </FormGroup>
-    <FormGroup label="actions">
+    <FormGroup label="Actions">
       <Input.TextArea
         placeholder="Input a actions json please"
-        rows={6}
+        rows={4}
         value={actionsStr}
         onChange={handleActionsChange}
         onBlur={handleActionsBlur}
       />
     </FormGroup>
+    <FormGroup label="Auto Setup">
+      <div>
+        <Switch checked={dataSource.setup?.auto} onChange={(on) => {
+          onChange && onChange({
+            ...dataSource,
+            setup: {
+              ...dataSource.setup,
+              auto: on
+            }
+          })
+        }} />
+        
+      </div>
+      
+    </FormGroup>
+    {
+          dataSource.setup.auto && 
+          <div>
+            <FormGroup label="Include">
+              <Input.TextArea
+                placeholder="Input include paths"
+                rows={4}
+              />
+            </FormGroup>
+            <FormGroup label="Option">
+              <Input.TextArea
+                placeholder="Input option of feedback.js"
+                rows={4}
+              />
+            </FormGroup>
+          </div>
+        }
   </div>
 }

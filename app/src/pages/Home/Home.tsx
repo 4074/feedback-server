@@ -21,14 +21,14 @@ export default function Home(props: RouteComponentProps) {
   }, [app.error])
 
   const [modalVisible, setModalVisible] = useState(false)
-  const [appEditing, setAppEditing] = useState<Model.App>({name: '', actions: [], hosts: []})
+  const [appEditing, setAppEditing] = useState<Model.App>({name: '', actions: [], hosts: [], setup: { auto: false, include: [], option: {}}})
 
   useUpdateEffect(() => {
     if (saveData.status === "finished") setModalVisible(false)
   }, [saveData.status])
 
   const handleCreate = () => {
-    setAppEditing({name: '', actions: [], hosts: []})
+    setAppEditing({name: '', actions: [], hosts: [], setup: { auto: false, include: [], option: {}}})
     setModalVisible(true)
   }
 
