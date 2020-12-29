@@ -39,11 +39,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script type="text/javascript" src="%REACT_APP_FEEDBACK_HOST%/js/feedback.js"></script>
-    <script type="text/javascript">
-      if (window.Feedback) {
-        window.Feedback.init('%REACT_APP_TEST_APPID%', {server: '%REACT_APP_FEEDBACK_HOST%/receive'})
-      }
-    </script>
+    <script type="text/javascript" src="%REACT_APP_FEEDBACK_HOST%/%REACT_APP_TEST_APPID%/feedback.js"></script>
   </body>
 </html>

@@ -28,10 +28,6 @@ export interface EditorProps {
 
 export default function Editor({ dataSource, onChange }: EditorProps) {
   const [actionsStr, setActionStr] = useState(JSON.stringify(dataSource.actions || [], null, 2))
-  const handleActionsChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = event.target
-    setActionStr(value)
-  }
   const handleActionsBlur = () => {
     try {
       const actions = JSON.parse(actionsStr)
@@ -45,8 +41,23 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
     }
   }
 
-  const handleSetupModeChange = () => {
+  const [includeStr, setIncludeStr] = useState(dataSource.setup.include.join('\n'))
 
+  const [optionStr, setOptionStr] = useState(JSON.stringify(dataSource.setup.option || {}, null, 2))
+  const handleOptionBlur = () => {
+    try {
+      const option = JSON.parse(optionStr)
+      onChange && onChange({
+        ...dataSource,
+        setup: {
+          ...dataSource.setup,
+          option
+        }
+      })  
+    } catch (error) {
+      console.log(error)
+      message.error('Option is Not a json!')
+    }
   }
 
   return <div className={styles.container}>
@@ -75,13 +86,13 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
         placeholder="Input a actions json please"
         rows={4}
         value={actionsStr}
-        onChange={handleActionsChange}
+        onChange={(event) => setActionStr(event.target.value)}
         onBlur={handleActionsBlur}
       />
     </FormGroup>
     <FormGroup label="Auto Setup">
       <div>
-        <Switch checked={dataSource.setup?.auto} onChange={(on) => {
+        <Switch checked={dataSource.setup.auto} onChange={(on) => {
           onChange && onChange({
             ...dataSource,
             setup: {
@@ -95,21 +106,39 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
       
     </FormGroup>
     {
-          dataSource.setup.auto && 
+      dataSource.setup.auto && 
           <div>
             <FormGroup label="Include">
               <Input.TextArea
                 placeholder="Input include paths"
                 rows={4}
+                value={includeStr}
+                onChange={(event) => {
+                  setIncludeStr(event.target.value)
+                }}
+                onBlur={() => {
+                  const data = {
+                    ...dataSource,
+                    setup: {
+                      ...dataSource.setup,
+                      include: includeStr.split('\n').filter(Boolean)
+                    }
+                  }
+                  console.log(data)
+                  onChange && onChange(data)
+                }}
               />
             </FormGroup>
             <FormGroup label="Option">
               <Input.TextArea
                 placeholder="Input option of feedback.js"
-                rows={4}
+                autoSize
+                value={optionStr}
+                onChange={(event) => setOptionStr(event.target.value)}
+                onBlur={handleOptionBlur}
               />
             </FormGroup>
           </div>
-        }
+    }
   </div>
 }

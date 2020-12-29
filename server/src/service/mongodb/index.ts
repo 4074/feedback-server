@@ -4,6 +4,7 @@ import config from '@server/config'
 import BaseService from '../BaseService'
 import App from './App'
 import Feedback from './Feedback'
+import build from '../../build'
 
 export default class MongodbService extends BaseService {
   public async setup(): Promise<void> {
@@ -39,11 +40,11 @@ export default class MongodbService extends BaseService {
       app.name = params.name
       app.hosts = params.hosts
       app.actions = params.actions
+      app.setup = params.setup
     }
-
     const result = (await app.save()).toObject()
-
-    return result as Model.App
+    build(result)
+    return result
   }
 
   public async removeApp(params: Model.App): Promise<void> {

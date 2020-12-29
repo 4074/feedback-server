@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+    "declaration": true,
+    "outDir": "build",
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  },
+  "include": [
+    "src/**/*",
+    "*.d.ts"
+  ]
+}
