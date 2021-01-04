@@ -1,5 +1,6 @@
 import path from 'path'
 import spawn from 'cross-spawn'
+import config from './config'
 
 const sdkdir = path.resolve(__dirname, '../../feedbackjs')
 
@@ -8,7 +9,10 @@ export default (app: Model.App) => {
     output: path.join(__dirname, '..', 'sdks', app.appId),
     AppId: app.appId,
     AutoSetup: app.setup.auto,
-    CustomDefaultOption: Buffer.from(JSON.stringify(app.setup.option)).toString('base64')
+    CustomDefaultOption: Buffer.from(JSON.stringify({
+      server: `${config.publicHost}/receive` ,
+      ...app.setup.option
+    })).toString('base64')
   }
   const envsArr = []
   for (const key of Object.keys(envs)) {

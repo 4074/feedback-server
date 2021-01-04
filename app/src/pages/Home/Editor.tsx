@@ -84,7 +84,7 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
     <FormGroup label="Actions">
       <Input.TextArea
         placeholder="Input a actions json please"
-        rows={4}
+        autoSize
         value={actionsStr}
         onChange={(event) => setActionStr(event.target.value)}
         onBlur={handleActionsBlur}

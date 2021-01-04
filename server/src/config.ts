@@ -10,6 +10,7 @@ export default {
   root: __dirname,
   port: env.PORT || 4000,
   host: env.HOST || 'http://localhost:4000',
+  publicHost: env.RECEIVE_HOST_PORT || 'http://localhost:4040',
   publicPort: env.RECEIVE_PORT || 4040,
   isPm2,
   isProduction,
@@ -23,5 +24,10 @@ export default {
     secret: env.AWS_SECRET,
     bucket: env.AWS_BUCKET,
     endpoint: env.AWS_ENDPOINT
+  },
+
+  popo: {
+    account: env.POPO_ACCOUNT || '',
+    token: env.POPO_TOKEN || ''
   }
 }

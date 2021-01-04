@@ -5,6 +5,7 @@ import BaseService from '../BaseService'
 import App from './App'
 import Feedback from './Feedback'
 import build from '../../build'
+import { isDiff } from '@server/utils'
 
 export default class MongodbService extends BaseService {
   public async setup(): Promise<void> {
@@ -29,21 +30,28 @@ export default class MongodbService extends BaseService {
 
   public async saveApp(params: Model.App): Promise<Model.App> {
     let app: any
+    let needBuild = false
 
     if (!params.appId) {
+      needBuild = true
       app = new App(params)
       app.appId = this.createAppId()
       app.createAt = new Date()
       app.timestamp = app.createAt.getTime()
     } else {
       app = await App.findOne({ appId: params.appId })
+      needBuild = isDiff(params.setup, app.toObject().setup)
+
       app.name = params.name
       app.hosts = params.hosts
       app.actions = params.actions
       app.setup = params.setup
     }
     const result = (await app.save()).toObject()
-    build(result)
+
+    if (needBuild) build(result)
+    // build(result)
+
     return result
   }
 

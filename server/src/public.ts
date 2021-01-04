@@ -26,8 +26,8 @@ app.use(
   })
 )
 
-const appStaticPath = path.resolve(`${__dirname}/../sdks/`)
-app.use(staticCache(appStaticPath))
+const appStaticPath = path.resolve(__dirname, '../sdks')
+app.use(staticCache(appStaticPath, { gzip: true, preload: false, dynamic: true }))
 
 app.use(LogMiddleware())
 app.use(ValidateMiddleware())

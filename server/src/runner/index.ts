@@ -16,7 +16,7 @@ export default async function run(
 
     switch (action.type) {
       case 'popo': {
-        popoRunner(action, feedback)
+        popoRunner(action as Model.AppPopoAction, feedback)
         break
       }
       case 'udata-question': {
