@@ -105,3 +105,4 @@ dist
 
 server/build
 server/upload
+server/sdks/*
