@@ -7,6 +7,7 @@ import koaCompose from 'koa-compose'
 import cors from '@koa/cors'
 
 import config from '@server/config'
+import service from './service'
 
 import {
   LogMiddleware,
@@ -26,6 +27,7 @@ app.use(
   })
 )
 
+app.use(service.middleware)
 const appStaticPath = path.resolve(__dirname, '../sdks')
 app.use(staticCache(appStaticPath, { gzip: true, preload: false, dynamic: true }))
 

@@ -1,4 +1,5 @@
 /* eslint-disable class-methods-use-this */
+import Koa from 'koa'
 import { v4 as uuid } from 'uuid'
 
 export default class BaseService {
@@ -34,5 +35,9 @@ export default class BaseService {
 
   public async saveFeedback(params: Model.Feedback): Promise<Model.Feedback> {
     return params
+  }
+
+  public async middleware(ctx: Koa.Context, next: () => any) {
+    return next()
   }
 }

@@ -4,7 +4,7 @@ import config from './config'
 
 const sdkdir = path.resolve(__dirname, '../../feedbackjs')
 
-export default (app: Model.App) => {
+export default (app: Model.App, cb?: () => any) => {
   const envs = {
     output: path.join(__dirname, '..', 'sdks', app.appId),
     AppId: app.appId,
@@ -22,5 +22,7 @@ export default (app: Model.App) => {
   spawn('yarn', [
     'build',
     ...envsArr
-  ], { stdio: 'inherit', cwd: sdkdir })
+  ], { stdio: 'inherit', cwd: sdkdir }).on('exit', () => {
+    cb?.()
+  })
 }

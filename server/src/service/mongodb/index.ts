@@ -1,9 +1,13 @@
 /* eslint-disable class-methods-use-this */
+import fs from 'fs'
+import path from 'path'
+import Koa from 'koa'
 import mongoose from 'mongoose'
 import config from '@server/config'
 import BaseService from '../BaseService'
 import App from './App'
 import Feedback from './Feedback'
+import Build from './Build'
 import build from '../../build'
 import { isDiff } from '@server/utils'
 
@@ -49,7 +53,9 @@ export default class MongodbService extends BaseService {
     }
     const result = (await app.save()).toObject()
 
-    if (needBuild) build(result)
+    if (needBuild) build(result, () => {
+      this.saveBuild(app.appId)
+    })
     // build(result)
 
     return result
@@ -69,5 +75,40 @@ export default class MongodbService extends BaseService {
     const feedback = new Feedback(params)
     const result = (await feedback.save()).toObject()
     return result as Model.Feedback
+  }
+
+  public async middleware(ctx: Koa.Context, next: () => any) {
+    const match = ctx.path.match(/^\/(.+)\/feedback\.js$/)
+    if (!match) return next()
+
+    const appId = match[1]
+    const filedir = path.join(__dirname, '../../../sdks', appId)
+    const filepath = path.join(filedir, 'feedback.js')
+    if (!fs.existsSync(filepath)) {
+      const item: any = await Build.findOne({appId})
+      if (item) {
+        if (!fs.existsSync(filedir)) fs.mkdirSync(filedir)
+        fs.writeFileSync(filepath, item.content)
+      }
+    }
+    
+    return next()
+  }
+
+  private async saveBuild(appId: string): Promise<void> {
+    const filepath = path.join(__dirname, '../../../sdks', appId, 'feedback.js')
+    if (!fs.existsSync(filepath)) return
+    const content = fs.readFileSync(filepath).toString()
+    let item: any = await Build.findOne({appId})
+    if (item) {
+      item.content = content
+      item.cteateAt = new Date()
+    } else {
+      item = new Build({
+        appId, content, createAt: new Date()
+      })
+    }
+
+    return item.save()
   }
 }

@@ -10,7 +10,7 @@ export default {
   root: __dirname,
   port: env.PORT || 4000,
   host: env.HOST || 'http://localhost:4000',
-  publicHost: env.RECEIVE_HOST_PORT || 'http://localhost:4040',
+  publicHost: env.RECEIVE_HOST || 'http://localhost:4040',
   publicPort: env.RECEIVE_PORT || 4040,
   isPm2,
   isProduction,

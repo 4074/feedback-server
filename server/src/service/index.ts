@@ -1,3 +1,4 @@
+import Koa from 'koa'
 import config from '@server/config'
 import BaseSerice from './BaseService'
 import MongodbService from './mongodb'
@@ -46,6 +47,10 @@ export class Service extends BaseSerice {
 
   public async saveFeedback(params: Model.Feedback): Promise<Model.Feedback> {
     return this.instance.saveFeedback(params)
+  }
+
+  public middleware = async (ctx: Koa.Context, next: () => any) => {
+    return this.instance.middleware(ctx, next)
   }
 }
 
