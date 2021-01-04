@@ -24,7 +24,7 @@ export default class MongodbService extends BaseService {
   }
 
   public async findAppById(appId: string): Promise<Model.App | null> {
-    const record = await App.findOne({ appId })
+    const record: any = await App.findOne({ appId })
     if (record) return record.toObject()
   }
 
