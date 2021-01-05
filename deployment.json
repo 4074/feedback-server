@@ -1,8 +1,0 @@
-{
-  "serviceName": "feedback-server",
-  "service": {
-    "containers":[{
-      "image" : "dockerhub.nie.netease.com/uncle-y/feedback-server:{TAG}"
-    }]
-  }
-}
