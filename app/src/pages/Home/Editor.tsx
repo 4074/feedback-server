@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 
 import { Input, message, Switch } from 'antd'
 import styles from './Editor.module.scss'
@@ -28,6 +29,10 @@ export interface EditorProps {
 
 export default function Editor({ dataSource, onChange }: EditorProps) {
   const [actionsStr, setActionStr] = useState(JSON.stringify(dataSource.actions || [], null, 2))
+  useUpdateEffect(() => {
+    setActionStr(JSON.stringify(dataSource.actions || [], null, 2))
+  }, [dataSource.appId])
+
   const handleActionsBlur = () => {
     try {
       const actions = JSON.parse(actionsStr)
@@ -42,8 +47,14 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
   }
 
   const [includeStr, setIncludeStr] = useState(dataSource.setup.include.join('\n'))
+  useUpdateEffect(() => {
+    setIncludeStr(dataSource.setup.include.join('\n'))
+  }, [dataSource.appId])
 
   const [optionStr, setOptionStr] = useState(JSON.stringify(dataSource.setup.option || {}, null, 2))
+  useUpdateEffect(() => {
+    setOptionStr(JSON.stringify(dataSource.setup.option || {}, null, 2))
+  }, [dataSource.appId])
   const handleOptionBlur = () => {
     try {
       const option = JSON.parse(optionStr)
