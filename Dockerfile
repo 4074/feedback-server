@@ -16,6 +16,7 @@ RUN npm install --registry=https://registry.npm.taobao.org
 WORKDIR /web/server
 RUN npm install --registry=https://registry.npm.taobao.org
 RUN npm run build
+RUN mkdir sdks
 
 EXPOSE 4000
 

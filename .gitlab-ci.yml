@@ -20,8 +20,8 @@ notify_success:
     - curl -i -XPOST
       -H "X-Notify-AccessKey:$NOTIFY_TOKEN"
       -H 'Content-Type:application/json; charset=utf-8'
-      '$NOTIFY_URL'
-      -d '{"message_type":"popo","sender":"$NOTIFY_SENDER","reciever_list":["$NOTIFY_RECEIVER"],"content":"'"$msg"'"}'
+      "$NOTIFY_URL"
+      -d '{"message_type":"popo","sender":"'"$NOTIFY_SENDER"'","reciever_list":["'"$NOTIFY_RECEIVER"'"],"content":"'"$msg"'"}'
   only:
     - gitlab
   when: on_success
@@ -31,10 +31,10 @@ notify_failure:
   script:
     - msg="项目：$CI_PROJECT_NAME\r\n任务：$CI_BUILD_REF_NAME\r\n结果：CI/CD失败\r\n查看详情：$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID"
     - curl -i -XPOST
-      -H "X-Notify-AccessKey:$NOTIFY_TOKEN"
+      -H "X-Notify-AccessKey:${NOTIFY_TOKEN}"
       -H 'Content-Type:application/json; charset=utf-8'
-      '$NOTIFY_URL'
-      -d '{"message_type":"popo","sender":"$NOTIFY_SENDER","reciever_list":["$NOTIFY_RECEIVER"],"content":"'"$msg"'"}'
+      "$NOTIFY_URL"
+      -d '{"message_type":"popo","sender":"'"$NOTIFY_SENDER"'","reciever_list":["'"$NOTIFY_RECEIVER"'"],"content":"'"$msg"'"}'
   only:
     - gitlab
   when: on_failure
