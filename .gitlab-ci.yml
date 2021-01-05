@@ -7,9 +7,11 @@ stages:
 deploy:
   stage: deploy
   script:
-    - docker-deploy.sh ${CI_COMMIT_TAG} "uncle-y" "uncle-y" ${GROUP_PASSWORD} "feedback-server" "uncley" "feedback-server"
+    - TAG="v"$(date "+%Y%m%d_%H%M")
+    - echo ${TAG}
+    - docker-deploy.sh ${TAG} "uncle-y" "uncle-y" ${GROUP_PASSWORD} "feedback-server" "uncley" "feedback-server"
   only:
-    - tags
+    - gitlab
 
 notify_success:
   stage: notify
@@ -18,10 +20,10 @@ notify_success:
     - curl -i -XPOST
       -H "X-Notify-AccessKey:$NOTIFY_TOKEN"
       -H 'Content-Type:application/json; charset=utf-8'
-      'http://notify.nie.netease.com/api/v1/messages'
-      -d '{"message_type":"popo","sender":"grp.us.dw@corp.netease.com","reciever_list":["dwfn3398@corp.netease.com"],"content":"'"$msg"'"}'
+      '$NOTIFY_URL'
+      -d '{"message_type":"popo","sender":"$NOTIFY_SENDER","reciever_list":["$NOTIFY_RECEIVER"],"content":"'"$msg"'"}'
   only:
-    - tags
+    - gitlab
   when: on_success
 
 notify_failure:
@@ -31,8 +33,8 @@ notify_failure:
     - curl -i -XPOST
       -H "X-Notify-AccessKey:$NOTIFY_TOKEN"
       -H 'Content-Type:application/json; charset=utf-8'
-      'http://notify.nie.netease.com/api/v1/messages'
-      -d '{"message_type":"popo","sender":"grp.us.dw@corp.netease.com","reciever_list":["dwfn3398@corp.netease.com"],"content":"'"$msg"'"}'
+      '$NOTIFY_URL'
+      -d '{"message_type":"popo","sender":"$NOTIFY_SENDER","reciever_list":["$NOTIFY_RECEIVER"],"content":"'"$msg"'"}'
   only:
-    - tags
+    - gitlab
   when: on_failure
