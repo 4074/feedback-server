@@ -64,8 +64,8 @@ const defaults: FeedbackOptions = {
 
 ```bash
 # 开发，可传入默认的接收数据接口
-npm start --server=http://your-host.com/receive-feedback-data
+yarn start --server=http://your-host.com/receive-feedback-data
 
 # 构建，可传入默认的接收数据接口
-npm run build --server=http://your-host.com/receive-feedback-data
+yarn build --server=http://your-host.com/receive-feedback-data
 ```
