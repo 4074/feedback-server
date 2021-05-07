@@ -36,7 +36,7 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
   const handleActionsBlur = () => {
     try {
       const actions = JSON.parse(actionsStr)
-      onChange && onChange({
+      onChange?.({
         ...dataSource,
         actions: actions
       })  
@@ -58,7 +58,7 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
   const handleOptionBlur = () => {
     try {
       const option = JSON.parse(optionStr)
-      onChange && onChange({
+      onChange?.({
         ...dataSource,
         setup: {
           ...dataSource.setup,
@@ -74,7 +74,7 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
   return <div className={styles.container}>
     <FormGroup label="Name" required>
       <Input value={dataSource.name} placeholder="Input please" onChange={(event) => {
-        onChange && onChange({
+        onChange?.({
           ...dataSource,
           name: event.target.value
         })
@@ -85,7 +85,7 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
         placeholder="Input please, e.g: www.163.com"
         value={dataSource.hosts.join('\n')}
         onChange={(event) => {
-          onChange && onChange({
+          onChange?.({
             ...dataSource,
             hosts: event.target.value.split('\n')
           })
@@ -104,7 +104,7 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
     <FormGroup label="Auto Setup">
       <div>
         <Switch checked={dataSource.setup.auto} onChange={(on) => {
-          onChange && onChange({
+          onChange?.({
             ...dataSource,
             setup: {
               ...dataSource.setup,
@@ -136,7 +136,7 @@ export default function Editor({ dataSource, onChange }: EditorProps) {
                     }
                   }
                   console.log(data)
-                  onChange && onChange(data)
+                  onChange?.(data)
                 }}
               />
             </FormGroup>

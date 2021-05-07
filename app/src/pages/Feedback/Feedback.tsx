@@ -159,6 +159,7 @@ export default function Feedback(props: RouteComponentProps) {
       pagination={{hideOnSinglePage: true}}
       expandable={{
         expandRowByClick: true,
+        // eslint-disable-next-line react/no-unstable-nested-components
         expandedRowRender: record => <Form className={styles.detail} labelCol={{ span: 2 }}>
           <Form.Item label="Path">{record.path}</Form.Item>
           <Form.Item label="Message">{record.message}</Form.Item>

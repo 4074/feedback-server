@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import ReduxProvider from './ReduxProvider'
 import App from './App'
@@ -18,6 +17,7 @@ render(App)
 
 if (module.hot) {
   module.hot.accept('./App', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const NextApp = require('./App').default
     render(NextApp)
   })

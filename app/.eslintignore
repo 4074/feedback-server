@@ -1,2 +1,3 @@
 src/reducers
 node_modules
+*.config.js

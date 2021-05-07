@@ -14,5 +14,10 @@ module.exports = {
         }
       }
     }
-  ]
+  ],
+  webpack: {
+    plugins: {
+      remove: ['ForkTsCheckerWebpackPlugin']
+    }
+  }
 }

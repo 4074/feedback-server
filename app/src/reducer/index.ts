@@ -1,33 +1,31 @@
 import service from 'service'
-import createRepo, { combineToReducer } from './createRepo'
+import reduxu from 'redux-use'
 
-const app = createRepo('app', service.app.list)
-export const useApp = app.hook
-
-const appSave = createRepo('app/save', service.app.save)
-appSave.handles.success.push((dispatch, data) => {
-  dispatch(app.slice.actions.intercept((state) => {
-    if (!state.data) return
-    const index = state.data.apps.findIndex(item => item.appId === data.appId)
-    if (index >= 0) {
-      state.data.apps[index] = data
-    } else {
-      state.data.apps.push(data)
-    }
-  }))
-})
+const appSave = reduxu.async(service.app.save)
 export const useAppSave = appSave.hook
 
-const appRemove = createRepo('app/remove', service.app.remove)
-appRemove.handles.success.push((dispatch, data) => {
-  dispatch(app.slice.actions.intercept((state) => {
-    if (!state.data) return
-    state.data.apps = state.data.apps.filter(item => item.appId !== data.appId)
-  }))
-})
+const appRemove = reduxu.async(service.app.remove)
 export const useAppRemove = appRemove.hook
 
-const feedback = createRepo('feedback', service.feedback.list)
-export const useFeedback = feedback.hook
+export const useApp = reduxu.async(service.app.list, {
+  extraReducers(builder) {
+    builder.addCase(appSave.thunk.fulfilled, (state, action) => {
+      if (!state.data) return
+      const index = state.data.apps.findIndex(item => item.appId === action.payload.appId)
+      if (index >= 0) {
+        state.data.apps[index] = action.payload
+      } else {
+        state.data.apps.push(action.payload)
+      }
+    })
 
-export default combineToReducer(app, appSave, appRemove, feedback)
+    builder.addCase(appRemove.thunk.fulfilled, (state, action) => {
+      if (!state.data) return
+      state.data.apps = state.data.apps.filter(item => item.appId !== action.payload.appId)
+    })
+  }
+}).hook
+
+export const useFeedback = reduxu.async(service.feedback.list).hook
+
+export default reduxu.reducer()

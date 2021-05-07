@@ -97,7 +97,7 @@ function List({ dataSource, onEdit, onRemove }: ListProps) {
       title: 'Actions',
       dataIndex: 'actions',
       key: 'actions',
-      render: (actions?: Model.AppAction[]) => actions && actions.map(a => a.type).join(', ')
+      render: (actions?: Model.AppAction[]) => actions?.map(a => a.type).join(', ')
     },
     {
       title: '',
@@ -105,13 +105,13 @@ function List({ dataSource, onEdit, onRemove }: ListProps) {
       render: (text: string, record: any) => (
         <Space size="small">
           <Button type="default" size="small" onClick={() => {
-            onEdit && onEdit(record)
+            onEdit?.(record)
           }} >Edit</Button>
           
           <Popconfirm
             title="Are you sure delete this app?"
             onConfirm={() => {
-              onRemove && onRemove(record)
+              onRemove?.(record)
             }}
             okText="Delete"
             okButtonProps={{
