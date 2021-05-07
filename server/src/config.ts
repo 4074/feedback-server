@@ -26,6 +26,8 @@ export default {
     endpoint: env.AWS_ENDPOINT
   },
 
+  password: env.PASSWORD || '123456',
+
   popo: {
     account: env.POPO_ACCOUNT || '',
     token: env.POPO_TOKEN || ''

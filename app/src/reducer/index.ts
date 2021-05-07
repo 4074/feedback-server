@@ -1,13 +1,13 @@
-import service from 'service'
+import { create } from 'service'
 import reduxu from 'redux-use'
 
-const appSave = reduxu.async(service.app.save)
+const appSave = reduxu.async(create<API.AppController.SaveData, API.AppController.SaveParams>('app/save', 'post'))
 export const useAppSave = appSave.hook
 
-const appRemove = reduxu.async(service.app.remove)
+const appRemove = reduxu.async(create<API.AppController.RemoveData, API.AppController.RemoveParams>('app/remove', 'post'))
 export const useAppRemove = appRemove.hook
 
-export const useApp = reduxu.async(service.app.list, {
+export const useApp = reduxu.async(create<API.AppController.ListData>('app/list'), {
   extraReducers(builder) {
     builder.addCase(appSave.thunk.fulfilled, (state, action) => {
       if (!state.data) return
@@ -26,6 +26,6 @@ export const useApp = reduxu.async(service.app.list, {
   }
 }).hook
 
-export const useFeedback = reduxu.async(service.feedback.list).hook
+export const useFeedback = reduxu.async(create<API.FeedbackController.ListData>('feedback/list')).hook
 
 export default reduxu.reducer()
